@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Environments
+.venv/
+venv/
+env/
+
+# Model weights + generated artifacts (never redistributed here)
+artifacts/
+models/
+*.gguf
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.npy
+*.npz
+*.ckpt
+vendor/*.whl
+
+# Runtime / logs / reports
+logs/
+*.log
+runs/
+reports/
+harness_state*/
+results/raw/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*~
+
+# The vendor safetensors header prefix is metadata, not weights.
+!vendor/inkling-header.bin

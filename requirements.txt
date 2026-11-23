@@ -1,0 +1,10 @@
+# Analysis-only dependencies. The scripts use the standard library where possible.
+numpy>=1.26
+
+# scripts/trace_loop.py: builds the toy model and traces the loop graph.
+# transformers 5.24.0 is the first release with models/inkling2_loop.
+torch>=2.0
+transformers==5.24.0
+
+# GGUF inspection (optional; scripts/ use the raw header instead)
+# gguf>=0.10

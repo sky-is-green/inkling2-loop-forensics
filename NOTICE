@@ -1,0 +1,20 @@
+Inkling 2 loop forensics
+Independent analysis of Thinking Machines Lab's Inkling 2 Mini.
+
+This repository contains analysis, metadata and small scripts only. It redistributes no
+model weights, checkpoints, GGUFs or safetensors.
+
+Inkling 2 Mini is released by Thinking Machines Lab under the Apache License 2.0.
+"Thinking Machines", "Inkling" and "Inkling 2" are trademarks of their respective owners.
+This study is not affiliated with, endorsed by, or sponsored by Thinking Machines Lab.
+
+Vendor metadata files in vendor/ (config.json, generation_config.json, hf_quant_config.json,
+model.safetensors.index.json, the 2 MB safetensors header prefix, the chat template and the
+Hugging Face API response) are retained for interoperability and analysis. They are not
+weights and contain no tensor payloads.
+
+The Scion work referenced here is part of the Scion llama.cpp fork and is not redistributed
+in this repository. llama.cpp is MIT-licensed; see the fork for its notices.
+
+Unless otherwise noted, the contents of this repository are licensed under the Apache
+License 2.0 (see LICENSE).

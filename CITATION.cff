@@ -1,0 +1,9 @@
+cff-version: 1.2.0
+message: "If you use this analysis, cite the repository."
+title: "Inkling 2 loop forensics"
+abstract: "Independent analysis of Thinking Machines' Inkling 2 Mini looped-MoE architecture: loop semantics, tensor map, precision layout, and the DSpark drafter."
+type: software
+license: Apache-2.0
+repository-code: "https://github.com/sky-is-green/inkling2-loop-forensics"
+authors:
+  - name: "sky-is-green"
