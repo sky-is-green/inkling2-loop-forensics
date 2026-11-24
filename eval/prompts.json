@@ -1,0 +1,32 @@
+[
+  {
+    "id": "capital",
+    "prompt": "What is the capital of France? Answer in one word.",
+    "expected": ["Paris"]
+  },
+  {
+    "id": "arithmetic",
+    "prompt": "What is 84 * 3 / 2? Answer with the number only.",
+    "expected": ["126"]
+  },
+  {
+    "id": "batball",
+    "prompt": "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost? Answer with the amount only.",
+    "expected": ["0.05", "5 cents", "five cents"]
+  },
+  {
+    "id": "code",
+    "prompt": "Write a Python function that returns the sum of a list of numbers. Output only the code.",
+    "expected": ["def ", "sum("]
+  },
+  {
+    "id": "logic",
+    "prompt": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly? Answer yes or no, then one sentence.",
+    "expected": ["no"]
+  },
+  {
+    "id": "colors",
+    "prompt": "List exactly three primary colors, comma-separated.",
+    "expected": ["red", "blue", "yellow", "green"]
+  }
+]

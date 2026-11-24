@@ -11,9 +11,12 @@ are the actual analysis.
 - Architecture/tensor map in `docs/ARCHITECTURE.md`; HF names in `results/`.
 - GGUF layout and unsloth metadata in `docs/GGUF-LAYOUT.md`.
 
-## Phase B — loop study (next)
+## Phase B — loop study (in progress)
 
-Deliverables:
+First result: loop depth is trained. PPL 10.33 / **6.53** / 9.91 for 2/3/4 passes; the
+six-prompt probe is 6/6 clean at 3 and ~3/6 at 2 and 4. See `LOOP-STUDY.md`.
+
+Remaining deliverables:
 - loop 1/2/3 capability and compute table on a frozen prompt set;
 - component ablations (message gates, block residual, per-pass KV, controllers, sinks,
   relative bias vs RoPE);

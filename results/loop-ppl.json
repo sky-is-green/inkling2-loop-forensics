@@ -1,0 +1,53 @@
+{
+  "experiment": "loop-depth-ppl",
+  "date": "2026-11-24",
+  "model": {
+    "quant": "IQ4_XS",
+    "arch": "inkling2_loop",
+    "file": "unsloth/Inkling-2-Mini-GGUF Mainline_Support/Inkling-2-Mini-UD-IQ4_XS.gguf",
+    "sha256": "374970bf6f151fc50da49419751c3e77b82e373a3b9445ded617bd386cd12163"
+  },
+  "runtime": {
+    "binary": "scion-llama.cpp build-hip-loop llama-perplexity",
+    "commit": "35048268d",
+    "system_fingerprint": "b12407-35048268d"
+  },
+  "corpus": {
+    "path": "eval/wiki-blue-64k.txt",
+    "source": "Wikipedia 'Blue' plain-text extract, first 64 KiB",
+    "sha256": "3c7aa07e5ec63e4c06a5cf39daf54e8b976ac7dda35fa13d8e0ecbe88b2a1394",
+    "bytes": 32922
+  },
+  "prompts": {
+    "path": "eval/prompts.json",
+    "sha256": "cd83a8e5791a916ffaf2b12f90d3833021827a614c945779c107df1265eb368e"
+  },
+  "settings": {
+    "ctx": 2048,
+    "batch": 2048,
+    "chunks": 3,
+    "ngl": 99,
+    "one_card": true,
+    "gpu": "spare RX 7900 XT (bus 07)"
+  },
+  "override": "inkling2_loop.loop.count=int:N (GGUF metadata override; 3 is the trained value)",
+  "results": [
+    { "loops": 1, "ppl": null, "stderr": null, "note": "loader rejects n_passes < 2 for a fixed loop" },
+    { "loops": 2, "ppl": 10.3317, "stderr": 0.46038, "layer_applications": 36 },
+    { "loops": 3, "ppl": 6.5342, "stderr": 0.27505, "layer_applications": 48 },
+    { "loops": 4, "ppl": 9.9125, "stderr": 0.41438, "layer_applications": 60 }
+  ],
+  "generation": {
+    "path": "results/loop-gen.json",
+    "n_predict": 384,
+    "temperature": 0,
+    "reasoning_effort": "none",
+    "prompts": 6
+  },
+  "caveats": [
+    "Single 33 KB Wikipedia corpus, 3 chunks of 2048.",
+    "Metadata override puts the model off its trained schedule; this is the intended ablation.",
+    "One quant (IQ4_XS); quantization compounding is not measured here.",
+    "Generation probe is 6 prompts, greedy, no judge; indicative only."
+  ]
+}

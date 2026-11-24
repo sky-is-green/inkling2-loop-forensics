@@ -1,0 +1,254 @@
+[
+ {
+  "loop": 3,
+  "id": "capital",
+  "prompt": "What is the capital of France? Answer in one word.",
+  "expected": [
+   "Paris"
+  ],
+  "content": "Paris",
+  "reasoning": "The user asks for the capital of France, one word. Need answer only. Capital of France is Paris. Ensure one word. No extra.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-capital.log"
+ },
+ {
+  "loop": 3,
+  "id": "arithmetic",
+  "prompt": "What is 84 * 3 / 2? Answer with the number only.",
+  "expected": [
+   "126"
+  ],
+  "content": "126",
+  "reasoning": "The user wants 84 * 3 / 2. Compute: 84*3 = 252. 252/2 = 126. Need answer with number only. Ensure no extra text.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-arithmetic.log"
+ },
+ {
+  "loop": 3,
+  "id": "batball",
+  "prompt": "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost? Answer with the amount only.",
+  "expected": [
+   "0.05",
+   "5 cents",
+   "five cents"
+  ],
+  "content": "$0.05",
+  "reasoning": "The user wants answer amount only. Classic bat and ball: ball costs $0.10. Let's verify: let ball = x, bat = x+1.00. Sum = 2x+1.00 = 1.10 => 2x=0.10 => x=0.05? Wait check: bat costs $1.00 more than ball. bat = ball + 1.00. total = ball + ball + 1.00 = 2 ball + 1.00 = 1.10. 2 ball = 0.10. ball = 0.05. Hmm classic puzzle has bat and ball cost $1.10, bat costs $1.00 more than ball; answer is $0.05? Let's recall classic: \"A bat and ball cost $1.10. The bat costs $1.00 more than the ball. How much does the ball cost?\" Common wrong answer $0.10. Correct: ball $0.05, bat $1.05, total $1.10, difference $1.00. Yes correct is $0.05. I initially mis-stated. Need answer amount only. Final should be $0.05 only. Ensure no extra words.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-batball.log"
+ },
+ {
+  "loop": 3,
+  "id": "code",
+  "prompt": "Write a Python function that returns the sum of a list of numbers. Output only the code.",
+  "expected": [
+   "def ",
+   "sum("
+  ],
+  "content": "def sum_list(numbers):\n    return sum(numbers)",
+  "reasoning": "The user wants only code. Need provide Python function returning sum of list of numbers. No extra text. Ensure output only code. Could use built-in sum. Function signature def sum_list(numbers): return sum(numbers). That's valid. Need final only code, no markdown? They said output only the code. So final should be just code, no fences ideally. Ensure no explanation.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-code.log"
+ },
+ {
+  "loop": 3,
+  "id": "logic",
+  "prompt": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly? Answer yes or no, then one sentence.",
+  "expected": [
+   "no"
+  ],
+  "content": "No. The flowers that fade quickly may all be non-rose flowers, so the premises do not guarantee any rose fades quickly.",
+  "reasoning": "The user asks a logic question. Need answer yes/no then one sentence. Let's reason: Premises: All roses are flowers. Some flowers fade quickly. Does it follow some roses fade quickly? No. The flowers that fade quickly may be non-rose flowers; roses are a subset of flowers, but no info that any rose is among fading flowers. Need final exactly: \"No.\" then one sentence. Ensure one sentence after yes/no. Could say \"No. The fading flowers may all be non-rose flowers, so the premises do not guarantee any rose fades quickly.\" That's one sentence. Good.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-logic.log"
+ },
+ {
+  "loop": 3,
+  "id": "colors",
+  "prompt": "List exactly three primary colors, comma-separated.",
+  "expected": [
+   "red",
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "content": "red, yellow, blue",
+  "reasoning": "The user asks: List exactly three primary colors, comma-separated. Need answer exactly three primary colors comma-separated. Need decide which primary colors. In art/pigments primary colors are red, yellow, blue. In additive light primaries are red, green, blue. The phrase \"primary colors\" ambiguous. Common general knowledge: three primary colors are red, yellow, blue. Need list exactly three, comma-separated. No extra words. Ensure exactly three items. Final: red, yellow, blue. Lowercase okay. No period? comma-separated exactly. Do that.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-colors.log"
+ },
+ {
+  "loop": 2,
+  "id": "capital",
+  "prompt": "What is the capital of France? Answer in one word.",
+  "expected": [
+   "Paris"
+  ],
+  "content": "Paris",
+  "reasoning": "The user asks for the capital of France one word. Need answer one word. Ensure final only one word. Capital of France is Paris. Need final one word.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-2-capital.log"
+ },
+ {
+  "loop": 2,
+  "id": "arithmetic",
+  "prompt": "What is 84 * 3 / 2? Answer with the number only.",
+  "expected": [
+   "126"
+  ],
+  "content": "order 0.The user wants 84 * 3 / 2. Compute: 84 * 3 = 84 * 3 = 252. 252 / 0? No, /2 = 126. Answer only number.126",
+  "reasoning": "",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-2-arithmetic.log"
+ },
+ {
+  "loop": 2,
+  "id": "batball",
+  "prompt": "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost? Answer with the amount only.",
+  "expected": [
+   "0.05",
+   "5 cents",
+   "five cents"
+  ],
+  "content": "$0.10$0.10",
+  "reasoning": "The user wants the answer only. Need solve: Let x = ball cost. Ball x, bat x+1.00. Together 2x+1.00 = 1.10. x = 0.10. Answer only amount. Ensure no extra words. Final only amount.",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-2-batball.log"
+ },
+ {
+  "loop": 2,
+  "id": "code",
+  "prompt": "Write a Python function that returns the sum of a list of numbers. Output only the code.",
+  "expected": [
+   "def ",
+   "sum("
+  ],
+  "content": "def sum_numbers(numbers):\n    return sum(numbers)",
+  "reasoning": "The user wants a Python function that returns the sum of a list of numbers. Output only the sum of a list of numbers. Output only the code.\n\nNeed answer only code. Ensure no extra text. Function name maybe `sum` shadows builtins. Use `def sum_list(numbers): return sum(numbers)`. Only code block? The user says only code. We can output code only no markdown fences? Only code. Provide function.\n\nNeed be careful: \"Write a Python function that returns the numbers.\" Maybe they want the function body. Only code.\n\nFinal only code.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-2-code.log"
+ },
+ {
+  "loop": 2,
+  "id": "logic",
+  "prompt": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly? Answer yes or no, then one sentence.",
+  "expected": [
+   "no"
+  ],
+  "content": "premise: All roses are flowers. Some flowers are flowers. Some flowers are flowers. Some flowers are flowers. Some flowers are redundant. Some flowers are flowers. Some flowers are flowers. Some flowers premise. Some flowers are flowers. Some flowers premise. Some flowers flowers. Some flowers flowers. Some flowers flowers. Some flowers flowers. flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers flowers",
+  "reasoning": "",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-2-logic.log"
+ },
+ {
+  "loop": 2,
+  "id": "colors",
+  "prompt": "List exactly three primary colors, comma-separated.",
+  "expected": [
+   "red",
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "content": "primary colors: red, yellow, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, yellow, red, primary yellow, red, red, red, red, red, red, red, red, red, red, red, red, red, red, red, red, red, red, red",
+  "reasoning": "",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-2-colors.log"
+ },
+ {
+  "loop": 4,
+  "id": "capital",
+  "prompt": "What is the capital of France? Answer in one word.",
+  "expected": [
+   "Paris"
+  ],
+  "content": "Paris",
+  "reasoning": "The user asks for the capital of France, answer in one word. Need answer one word. France's capital is Paris. Ensure final only one word. No extra.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-4-capital.log"
+ },
+ {
+  "loop": 4,
+  "id": "arithmetic",
+  "prompt": "What is 84 * 3 / 2? Answer with the number only.",
+  "expected": [
+   "126"
+  ],
+  "content": "126",
+  "reasoning": "The user wants 84 * 3 / 2. Need answer with number only. Compute: 84/2=42, 42*3=42*3=126. Or 84*3=252, /2=126. Final only number.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-4-arithmetic.log"
+ },
+ {
+  "loop": 4,
+  "id": "batball",
+  "prompt": "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost? Answer with the amount only.",
+  "expected": [
+   "0.05",
+   "5 cents",
+   "five cents"
+  ],
+  "content": "",
+  "reasoning": "The user is asking a classic bat and ball bat problem. Let me solve it carefully.\n\nLet x = ball cost.\nBat cost = x + 1.00\nTogether: x + (x + 1.00) = 1.10\n2x + 1.00 = 1.10\n2x = 1.10\nx = 1.10\nx = 1.00\n\nWait, let me redo: 2x = 1.10 - 1.00 = 0.10\nx = 1.10\nx = 1.10\nx = 1.00\n\nHmm, that's wrong. Let me redo.\n\n2x = 1.10\nx = 1.10\nx = 1.10\n\nWait, I need to be careful. Let me redo.\n\n2x = 1.10\nx = 1.10\n\nNo. Let me be careful.\n\n2x = 1.10\nx = 1.10\n\nThat's wrong. Let me redo.\n\n2x = 1.10\nx = 1.10\n\nI keep making the same mistake. Let me be very careful.\n\n2x = 1.10\nx = 1.10\n\nNo, let me be careful.\n\n2x = 1.10\nx = 1.10\n\nI keep making the same mistake. Let me be careful.\n\n2x = 1.10\nx = 1.10\n\nI keep making the same mistake. Let me be careful.\n\n2x = 1.10\n\nI keep making the same mistake. Let me be careful.\n\n2x = 1.10\n\nI keep making the same mistake. Let me be careful.\n\n2",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-4-batball.log"
+ },
+ {
+  "loop": 4,
+  "id": "code",
+  "prompt": "Write a Python function that returns the sum of a list of numbers. Output only the code.",
+  "expected": [
+   "def ",
+   "sum("
+  ],
+  "content": "def sum_numbers(numbers):\n    return sum(numbers)",
+  "reasoning": "The user wants a Python function that returns the sum of a list of numbers. Output only the code. Need answer with only code, no explanation. Ensure final only code. Could include function definition. Need be careful: \"Output only the code\" means no markdown fences? Probably just code. Function returns sum of list of numbers. Could use list comprehension. Simple.\n\nNeed final only code. No extra text.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-4-code.log"
+ },
+ {
+  "loop": 4,
+  "id": "logic",
+  "prompt": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly? Answer yes or no, then one sentence.",
+  "expected": [
+   "no"
+  ],
+  "content": "",
+  "reasoning": "The user asks a logic question. Need answer yes/no then one sentence. Need reason: All roses are flowers. Some flowers are fade quickly. Do we conclude some roses are flowers? No. Need be careful: \"Some flowers fade quickly\" means exists some flowers that fade quickly. It doesn't say some flowers are flowers that fade quickly. It doesn't say anything about roses. Roses are flowers. The set of flowers that fade quickly are flowers. Some flowers are flowers that fade quickly. The set of flowers that fade quickly are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of flowers that are flowers. The set of",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-4-logic.log"
+ },
+ {
+  "loop": 4,
+  "id": "colors",
+  "prompt": "List exactly three primary colors, comma-separated.",
+  "expected": [
+   "red",
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "content": "",
+  "reasoning": "The user asks: List exactly three primary colors, comma-separated. Need answer exactly three primary colors comma-separated. Need consider ambiguity: primary colors in art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art/painting primary colors: red, yellow, blue. In art",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-4-colors.log"
+ }
+]

@@ -7,8 +7,8 @@ This repository is the analysis home for the model itself: recovered architectur
 map, precision layout, loop semantics, and the questions the study must answer. It
 redistributes no model weights. It is not affiliated with Thinking Machines Lab.
 
-**Status:** Phase 0 — seed. The architecture and tensor layout are recovered; the loop and
-drafter study has not started.
+**Status:** Phase B — loop study. The architecture and tensor layout are recovered; the
+first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
 
 ## What the model is
 
@@ -42,8 +42,10 @@ drafter study has not started.
   read from the bank by learned queries (three on global layers, one elsewhere). Maximum
   bank size is four blocks; reads see at most five vectors.
 - **The core is trained for the loop.** The 12-layer core is applied three times and the
-  message gates are trained; a loop added post-hoc to a non-looped model is not expected to
-  reproduce the gain. This is the central risk for the 35B port.
+  message gates are trained. Measured on the same weights: PPL **6.53** at 3 passes,
+  **10.33** at 2, **9.91** at 4; the six-prompt probe is 6/6 clean at 3 and ~3/6 at 2 and 4.
+  A loop added post-hoc to a non-looped model is not expected to reproduce the gain. This is
+  the central risk for the 35B port.
 - **The drafter is a separate 3-layer DSpark block model** (`mtp.safetensors`), tapping
   application layers 5, 23, 41 and 48, block size 8, Markov rank 256. Its exact math is
   open; see `docs/OPEN-QUESTIONS.md`.
@@ -58,8 +60,9 @@ drafter study has not started.
 | `docs/ROADMAP.md` | loop study, drafter reconstruction, 35B implications |
 | `docs/REPRODUCIBILITY.md` | artifacts, hashes, tools, commands |
 | `vendor/` | config, quant config, safetensors index + 2 MB header, chat template |
-| `scripts/` | tensor-map parser, size budget, toy loop trace |
-| `results/` | tensor map JSON, HF state-dict names |
+| `eval/` | frozen corpus and prompt set |
+| `scripts/` | tensor-map parser, size budget, toy loop trace, loop-depth runner |
+| `results/` | tensor map JSON, HF state-dict names, loop-depth results |
 
 Large artifacts (GGUFs, safetensors, logs) are gitignored and live outside the repository;
 see `vendor/MANIFEST.md` for URLs, sizes and hashes.
