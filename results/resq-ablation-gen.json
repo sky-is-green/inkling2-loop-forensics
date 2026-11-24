@@ -1,0 +1,86 @@
+[
+ {
+  "loop": 3,
+  "id": "capital",
+  "prompt": "What is the capital of France? Answer in one word.",
+  "expected": [
+   "Paris"
+  ],
+  "content": "",
+  "reasoning": ", and/ or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe, or maybe",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-3-capital.log"
+ },
+ {
+  "loop": 3,
+  "id": "arithmetic",
+  "prompt": "What is 84 * 3 / 2? Answer with the number only.",
+  "expected": [
+   "126"
+  ],
+  "content": "",
+  "reasoning": ", and/ or maybe?\n\n/ 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?\n\n 0, or maybe?",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-3-arithmetic.log"
+ },
+ {
+  "loop": 3,
+  "id": "batball",
+  "prompt": "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost? Answer with the amount only.",
+  "expected": [
+   "0.05",
+   "5 cents",
+   "five cents"
+  ],
+  "content": "",
+  "reasoning": ", and/ orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-3-batball.log"
+ },
+ {
+  "loop": 3,
+  "id": "code",
+  "prompt": "Write a Python function that returns the sum of a list of numbers. Output only the code.",
+  "expected": [
+   "def ",
+   "sum("
+  ],
+  "content": "",
+  "reasoning": ", and/ orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-3-code.log"
+ },
+ {
+  "loop": 3,
+  "id": "logic",
+  "prompt": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly? Answer yes or no, then one sentence.",
+  "expected": [
+   "no"
+  ],
+  "content": "",
+  "reasoning": ", or maybe?\n\n/ˈ�, or maybe?\n\n  //   //   //   /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /ˈ  /",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-3-logic.log"
+ },
+ {
+  "loop": 3,
+  "id": "colors",
+  "prompt": "List exactly three primary colors, comma-separated.",
+  "expected": [
+   "red",
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "content": "",
+  "reasoning": ", and/ orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod, orthod",
+  "match": false,
+  "rc": 0,
+  "log": "logs/loopgen-3-colors.log"
+ }
+]

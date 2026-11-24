@@ -101,3 +101,51 @@ control flow.
 
 Artifacts: `results/controller-ablation.json`, `results/controller-ablation-gen.json`,
 `scripts/zero_loop_controllers.py`.
+
+---
+
+# Component sensitivity
+
+Same weights, loop 3, one component zeroed per copy. PPL on the frozen corpus; six-prompt
+probe at `reasoning_effort none`.
+
+| ablation | tensors | PPL | Δ | clean | verdict |
+|---|---:|---:|---:|---:|---|
+| block-read queries (`attn_res_query`, `ffn_res_query`, `output_res_query`) | 48 | **731.36** | 112× | 0/6 | **most critical** |
+| relative-position bias (`attn_rel`, `attn_rel_bias`) | 48 | **244.73** | 37× | 0/6 | **positional mechanism** |
+| loop controllers (message gates) | 144 | **13.29** | +103 % | 2/6 | **loop mechanism** |
+| attention sinks (`attn_sink_proj`) | 24 | 7.21 | +10 % | 6/6 | secondary at 2k |
+| baseline | — | 6.53 | — | 6/6 | |
+
+Interpretation:
+
+- The **learned block-attention read** is the architecture. Zeroing its queries (making the
+  read a uniform average over the bank) is worse than removing position or the loop messages.
+- The **relative-position bias** is the only positional mechanism; with no RoPE, removing it
+  destroys the model.
+- The **cross-pass messages** are what make the three passes different and useful.
+- The **attention sinks** cost 10 % PPL but do not break the six short prompts; they may
+  matter for long context, which is untested here.
+
+Artifacts: `results/component-ablations.json`, `results/{relpos,sinks,resq}-ablation-gen.json`,
+`scripts/zero_tensors.py`.
+
+---
+
+# Quantization: attention/embed precision is not the bottleneck
+
+| model | attention / embed | experts 0–19 | experts 20–23 | PPL |
+|---|---|---|---:|---:|
+| UD-IQ4_XS | Q8/Q6 | NVFP4 | IQ4_XS / Q5 | **6.5342 ± 0.275** |
+| UD-Q8_K_XL | BF16 | NVFP4 | BF16 | **6.5263 ± 0.274** |
+
+The two differ in attention/embed precision and in the last four expert layers, but both
+keep the dominant layers 0–19 experts at **NVFP4** (verified from the GGUF type tables).
+PPL is unchanged within noise (0.12 %). So the quantization risk, if any, lives in the
+NVFP4 experts, not in attention or the small tail of expert layers.
+
+Q8_K_XL does not fit one 20.5 GB card (22.9 GB); the run used `-ncmoe 6` to put six layers'
+MoE on CPU. That is valid for PPL, not for speed.
+
+A true expert-precision control needs a self-converted GGUF with Q4_K/Q5_K experts (or the
+vendor MXFP8 release), not another unsloth quant. That is the next quantization step.

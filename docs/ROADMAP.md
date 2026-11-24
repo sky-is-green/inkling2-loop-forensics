@@ -13,8 +13,12 @@ are the actual analysis.
 
 ## Phase B — loop study (in progress)
 
-First result: loop depth is trained. PPL 10.33 / **6.53** / 9.91 for 2/3/4 passes; the
-six-prompt probe is 6/6 clean at 3 and ~3/6 at 2 and 4. See `LOOP-STUDY.md`.
+Results so far (see `LOOP-STUDY.md`):
+- loop depth is trained: PPL 10.33 / **6.53** / 9.91 for 2/3/4 passes;
+- component order: block-read queries (731) > relative bias (245) > loop controllers (13.3)
+  > sinks (7.2);
+- quantization is expert-bound: IQ4_XS ≈ Q8_K_XL because both keep experts 0–19 at NVFP4;
+- drafter inventory: `DRAFTER-LAYOUT.md` (3 dense layers, 256-rank RNN Markov head).
 
 Remaining deliverables:
 - loop 1/2/3 capability and compute table on a frozen prompt set;

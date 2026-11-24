@@ -1,0 +1,74 @@
+{
+  "experiment": "component-ablations",
+  "date": "2026-11-24",
+  "question": "Which learned components carry the model, and which are secondary?",
+  "model": {
+    "base": "unsloth/Inkling-2-Mini-GGUF Mainline_Support/Inkling-2-Mini-UD-IQ4_XS.gguf",
+    "base_sha256": "374970bf6f151fc50da49419751c3e77b82e373a3b9445ded617bd386cd12163",
+    "method": "reflink copy, zero a tensor group, same runtime and eval",
+    "ablations": "local files outside this repo: iq4xs-nocontrollers.gguf, iq4xs-norelpos.gguf, iq4xs-nosinks.gguf, iq4xs-noresq.gguf"
+  },
+  "runtime": {
+    "binary": "scion-llama.cpp build-hip-loop",
+    "commit": "35048268d",
+    "loops": 3,
+    "ctx": 2048
+  },
+  "corpus": {
+    "path": "eval/wiki-blue-64k.txt",
+    "sha256": "3c7aa07e5ec63e4c06a5cf39daf54e8b976ac7dda35fa13d8e0ecbe88b2a1394"
+  },
+  "baseline": {
+    "ppl": 6.5342,
+    "ppl_stderr": 0.27505,
+    "clean_prompts": 6
+  },
+  "results": [
+    {
+      "component": "block-read queries (attn_res_query, ffn_res_query, output_res_query)",
+      "tensors_zeroed": 48,
+      "ppl": 731.3644,
+      "ppl_stderr": 67.12305,
+      "delta_vs_baseline": "112x",
+      "clean_prompts": 0,
+      "generation": "results/resq-ablation-gen.json",
+      "verdict": "most critical; the learned block-attention read is the architecture"
+    },
+    {
+      "component": "relative-position bias (attn_rel, attn_rel_bias)",
+      "tensors_zeroed": 48,
+      "ppl": 244.7305,
+      "ppl_stderr": 15.33942,
+      "delta_vs_baseline": "37x",
+      "clean_prompts": 0,
+      "generation": "results/relpos-ablation-gen.json",
+      "verdict": "load-bearing; with no RoPE this is the positional mechanism"
+    },
+    {
+      "component": "loop controllers (message gates)",
+      "tensors_zeroed": 144,
+      "ppl": 13.2932,
+      "ppl_stderr": 0.61183,
+      "delta_vs_baseline": "+103%",
+      "clean_prompts": 2,
+      "generation": "results/controller-ablation-gen.json",
+      "verdict": "load-bearing; cross-pass messages are the loop mechanism"
+    },
+    {
+      "component": "attention sinks (attn_sink_proj)",
+      "tensors_zeroed": 24,
+      "ppl": 7.2088,
+      "ppl_stderr": 0.31077,
+      "delta_vs_baseline": "+10%",
+      "clean_prompts": 6,
+      "generation": "results/sinks-ablation-gen.json",
+      "verdict": "secondary at 2k; may matter for long context"
+    }
+  ],
+  "caveats": [
+    "Zeroing weights is off-distribution: it proves necessity, not sufficiency or optimality.",
+    "One quant (IQ4_XS), one corpus, six prompts.",
+    "Zeroing block queries makes the read a uniform average, not a plain residual; the true no-block-residual ablation needs a graph variant.",
+    "Sinks were tested at 2k only; long-context behavior is untested."
+  ]
+}

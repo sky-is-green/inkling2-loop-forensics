@@ -1,0 +1,86 @@
+[
+ {
+  "loop": 3,
+  "id": "capital",
+  "prompt": "What is the capital of France? Answer in one word.",
+  "expected": [
+   "Paris"
+  ],
+  "content": "Paris",
+  "reasoning": "The user asks capital of France, one word. Need answer accurately. Capital of France is Paris. One word. No extra. Ensure final only Paris.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-capital.log"
+ },
+ {
+  "loop": 3,
+  "id": "arithmetic",
+  "prompt": "What is 84 * 3 / 2? Answer with the number only.",
+  "expected": [
+   "126"
+  ],
+  "content": "126",
+  "reasoning": "The user wants the number only. Compute 84 * 3 / 2. Order of operations: 84*3=252, /2=126. Need final only number. Ensure no extra text.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-arithmetic.log"
+ },
+ {
+  "loop": 3,
+  "id": "batball",
+  "prompt": "A bat and a ball cost $1.10 together. The bat costs $1.00 more than the ball. How much does the ball cost? Answer with the amount only.",
+  "expected": [
+   "0.05",
+   "5 cents",
+   "five cents"
+  ],
+  "content": "$0.05",
+  "reasoning": "The user wants the amount only. Classic bat ball problem. Let ball = x bat = x+1.00 total 2x+1.00=1.10 =>2x=0.10=>x=0.05. Need answer amount only likely $0.05. Ensure no extra explanation.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-batball.log"
+ },
+ {
+  "loop": 3,
+  "id": "code",
+  "prompt": "Write a Python function that returns the sum of a list of numbers. Output only the code.",
+  "expected": [
+   "def ",
+   "sum("
+  ],
+  "content": "def sum_numbers(numbers):\n    total = 0\n    for n in numbers:\n        total += n\n    return total",
+  "reasoning": "The user wants only code output. Need provide Python function sum of list numbers. Ensure no extra text. Could use built-in sum but maybe implement loop. Output only code. Need final only code. No markdown? Output only code, so raw code. Function name sum_list maybe. Include type hints? Fine. Ensure no explanation.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-code.log"
+ },
+ {
+  "loop": 3,
+  "id": "logic",
+  "prompt": "All roses are flowers. Some flowers fade quickly. Can we conclude that some roses fade quickly? Answer yes or no, then one sentence.",
+  "expected": [
+   "no"
+  ],
+  "content": "No. The flowers that fade quickly may not be roses.",
+  "reasoning": "The user asks a logic question. Need answer yes/no then one sentence. Let's reason: All roses are flowers (roses subset flowers). Some flowers fade quickly (exists flower fading quickly). Does that imply some roses fade quickly? No, the fading flowers may be non-roses. Need final format: \"No. ...\" one sentence sentence after? They said answer yes or no, then one sentence. So final: \"No. The flowers that fade quickly may not be roses.\" Ensure one sentence after no. Good.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-logic.log"
+ },
+ {
+  "loop": 3,
+  "id": "colors",
+  "prompt": "List exactly three primary colors, comma-separated.",
+  "expected": [
+   "red",
+   "blue",
+   "yellow",
+   "green"
+  ],
+  "content": "red,yellow,blue",
+  "reasoning": "The user asks list exactly three primary colors comma-separated. Need answer. Primary colors depend context: traditional art primary colors red, yellow,blue; additive light primaries red,green,blue. User says primary colors exactly three. Most common primary colors in art: red, yellow,blue. Need comma-separated exactly three. Ensure no extra words. Final: red, yellow,blue.",
+  "match": true,
+  "rc": 0,
+  "log": "logs/loopgen-3-colors.log"
+ }
+]

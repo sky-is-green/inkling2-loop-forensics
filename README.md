@@ -50,6 +50,16 @@ first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
   doubles PPL (6.53 → 13.29) and drops the probe from 6/6 to 2/6, while the passes, block
   residual and per-pass KV still run. The loop is not a repeated block; the learned message
   channel is what makes later passes useful.
+- **Component order.** Zeroing the block-read queries is catastrophic (PPL 731), the learned
+  relative-position bias is next (245), then the loop controllers (13.3); attention sinks are
+  secondary (7.21, still 6/6). The learned block-attention read and the learned position are
+  the architecture.
+- **Quantization is expert-bound.** IQ4_XS and Q8_K_XL have the same PPL (6.53 vs 6.53)
+  because both keep the dominant layers 0–19 experts at NVFP4; raising attention/embed and
+  layers 20–23 to BF16 changes nothing measurable.
+- **The drafter is a dense 3-layer block model** with a 256-rank RNN Markov head, four
+  target taps (5/23/41/48), block 8, and shared target embeddings/output. Tensor map and
+  forward-pass hypothesis: [`docs/DRAFTER-LAYOUT.md`](docs/DRAFTER-LAYOUT.md).
 - **The drafter is a separate 3-layer DSpark block model** (`mtp.safetensors`), tapping
   application layers 5, 23, 41 and 48, block size 8, Markov rank 256. Its exact math is
   open; see `docs/OPEN-QUESTIONS.md`.
