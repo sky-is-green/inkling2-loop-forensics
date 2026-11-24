@@ -69,3 +69,35 @@ Commands:
 llama-perplexity -m IQ4_XS.gguf -f eval/wiki-blue-64k.txt -c 2048 -b 2048 -ngl 99 \
   --chunks 4 --override-kv inkling2_loop.loop.count=int:N
 ```
+
+---
+
+# Cross-pass message gates are load-bearing
+
+**Question:** is the gain from the three repeated layers, or from the learned cross-pass
+messages?
+
+**Method:** reflink copy of the same IQ4_XS GGUF; zero all 144
+`loop_{q,k,v,ffn}_ctrl_{down,gain,forget}` weights in layers 6–17 (113.2 MB). The message
+gate becomes `(1-0)·cur + 0·message = cur`: the passes still run, the block-attention
+residual and per-pass KV are untouched, but no cross-pass information is mixed in.
+
+| metric | baseline | no controllers | Δ |
+|---|---:|---:|---:|
+| PPL (loop 3) | **6.5342** | **13.2932** | +103 % |
+| clean prompts | **6/6** | **2/6** | |
+
+Ablated generation: capital and code correct; arithmetic, bat and ball, and the logic question
+never reach a final answer within 384 tokens; the color list repeats.
+
+**Interpretation.** The loop is not “three copies of the same block”. The learned message
+channel is what makes the later passes different and useful. Removing it roughly doubles
+perplexity and breaks four of six prompts. Any 35B loop must train the cross-pass gates; a
+shared core alone is not the mechanism.
+
+**Caveat.** This proves necessity, not that rank 64 (or this exact gate form) is optimal. It
+also leaves the passes running, so it isolates the message channel rather than the loop
+control flow.
+
+Artifacts: `results/controller-ablation.json`, `results/controller-ablation-gen.json`,
+`scripts/zero_loop_controllers.py`.

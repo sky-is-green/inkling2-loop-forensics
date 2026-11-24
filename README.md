@@ -46,6 +46,10 @@ first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
   **10.33** at 2, **9.91** at 4; the six-prompt probe is 6/6 clean at 3 and ~3/6 at 2 and 4.
   A loop added post-hoc to a non-looped model is not expected to reproduce the gain. This is
   the central risk for the 35B port.
+- **The cross-pass gates are the mechanism.** Zeroing the 144 message-gate weights (113 MB)
+  doubles PPL (6.53 → 13.29) and drops the probe from 6/6 to 2/6, while the passes, block
+  residual and per-pass KV still run. The loop is not a repeated block; the learned message
+  channel is what makes later passes useful.
 - **The drafter is a separate 3-layer DSpark block model** (`mtp.safetensors`), tapping
   application layers 5, 23, 41 and 48, block size 8, Markov rank 256. Its exact math is
   open; see `docs/OPEN-QUESTIONS.md`.

@@ -1,0 +1,39 @@
+{
+  "experiment": "loop-controller-ablation",
+  "date": "2026-11-24",
+  "question": "Are the cross-pass message gates load-bearing, or are three repeated layers enough?",
+  "model": {
+    "base": "unsloth/Inkling-2-Mini-GGUF Mainline_Support/Inkling-2-Mini-UD-IQ4_XS.gguf",
+    "base_sha256": "374970bf6f151fc50da49419751c3e77b82e373a3b9445ded617bd386cd12163",
+    "ablated": "iq4xs-nocontrollers.gguf (local, outside this repo)",
+    "edit": "zero all 144 loop_{q,k,v,ffn}_ctrl_{down,gain,forget} weights in layers 6-17 (113.2 MB)",
+    "effect": "control() becomes (1-0)*cur + 0*message = cur; messages are computed but ignored"
+  },
+  "runtime": {
+    "binary": "scion-llama.cpp build-hip-loop",
+    "commit": "35048268d",
+    "loops": 3
+  },
+  "corpus": {
+    "path": "eval/wiki-blue-64k.txt",
+    "sha256": "3c7aa07e5ec63e4c06a5cf39daf54e8b976ac7dda35fa13d8e0ecbe88b2a1394"
+  },
+  "ppl": {
+    "baseline": 6.5342,
+    "baseline_stderr": 0.27505,
+    "ablated": 13.2932,
+    "ablated_stderr": 0.61183,
+    "delta": "+103%"
+  },
+  "generation": {
+    "path": "results/controller-ablation-gen.json",
+    "baseline_clean": 6,
+    "ablated_clean": 2,
+    "note": "capital and code correct; arithmetic, batball and logic hit the 384-token cap with no final answer; colors repeats"
+  },
+  "caveats": [
+    "Weight zeroing is an off-distribution ablation: it proves necessity, not that rank 64 is optimal.",
+    "Only IQ4_XS and one corpus/prompt set.",
+    "The passes still run; the block-attention residual and per-pass KV are untouched."
+  ]
+}
