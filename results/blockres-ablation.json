@@ -1,0 +1,40 @@
+{
+  "experiment": "block-residual-plain-ablation",
+  "date": "2026-11-24",
+  "question": "Is the block-attention read essential, or is a plain residual enough?",
+  "method": "runtime hook LLAMA_INKLING2_NO_BLOCK_RES=1: mix() returns the current state repeated to the query count instead of reading the block bank. The bank is still accumulated and the loop messages still use it; only the sublayer reads change.",
+  "runtime": {
+    "fork_branch": "loop/ablation-blockres",
+    "commit": "bb6bee917",
+    "binary": "scion-llama.cpp build-hip-loop",
+    "base_branch": "loop/inkling2-port @ 35048268d"
+  },
+  "model": {
+    "quant": "UD-IQ4_XS",
+    "sha256": "374970bf6f151fc50da49419751c3e77b82e373a3b9445ded617bd386cd12163",
+    "loops": 3
+  },
+  "corpus": {
+    "path": "eval/wiki-blue-64k.txt",
+    "sha256": "3c7aa07e5ec63e4c06a5cf39daf54e8b976ac7dda35fa13d8e0ecbe88b2a1394",
+    "ctx": 2048
+  },
+  "ppl": {
+    "baseline": 6.5342,
+    "baseline_stderr": 0.27505,
+    "ablated": 12877527.1584,
+    "ablated_stderr": 1120883.73191,
+    "ratio": "~1.97e6"
+  },
+  "generation": {
+    "path": "results/blockres-ablation-gen.json",
+    "clean_prompts": 0,
+    "note": "gibberish and repeated tokens on all six prompts"
+  },
+  "verdict": "The block-attention read is the architecture. Removing it destroys the model; even a uniform read over the bank (query-zero, PPL 731) is far better than no bank.",
+  "caveats": [
+    "Extreme off-distribution ablation: proves necessity, not that the learned-query form is optimal.",
+    "Only the sublayer reads are bypassed; the bank is still built and the loop messages still read it.",
+    "One quant, one corpus, six prompts."
+  ]
+}

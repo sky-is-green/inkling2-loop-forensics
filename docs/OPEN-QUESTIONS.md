@@ -48,9 +48,16 @@ negative result, or a design decision recorded in these docs.
 10. **What is the acceptance ceiling?** Measure by prompt class (code, factual, chat) and
     temperature; this sets the useful draft length.
 
-## D. 35B and numerics
+## D. Long context
 
-11. **35B design.** Which 12 layers form the core (8–19, 10–29, 14–25), 2 or 3 passes, and
+13. **Is the loop a long-context fix?** The block bank gives each sublayer access to block
+    summaries instead of one residual stream; the relative bias is local (1024) and the
+    per-pass KV triples the core cache. Test at 8k/16k/32k, PPL by position bucket, needle
+    retrieval and decode cost. Hypothesis and protocol: `LONG-CONTEXT.md`. Not run yet.
+
+## E. 35B and numerics
+
+14. **35B design.** Which 12 layers form the core (8–19, 10–29, 14–25), 2 or 3 passes, and
     which components survive ablation? What is the distillation recipe and the eval gate?
-12. **Numerics.** F32 block states, softcaps, L2 clips, router precision, sinks: what is the
+15. **Numerics.** F32 block states, softcaps, L2 clips, router precision, sinks: what is the
     minimum precision that preserves the reference logits, and where does the loop need F32?

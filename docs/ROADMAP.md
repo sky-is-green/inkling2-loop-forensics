@@ -19,6 +19,9 @@ Results so far (see `LOOP-STUDY.md`):
   > sinks (7.2);
 - quantization is expert-bound: IQ4_XS ≈ Q8_K_XL because both keep experts 0–19 at NVFP4;
   at 2-bit the trained loop still gives 6.73 PPL and 6/6, with the same component hierarchy;
+- block residual: replacing the read with a plain residual gives PPL 12.9 M, the strongest
+  component result;
+- long-context hypothesis recorded in `LONG-CONTEXT.md`; overnight run pending;
 - drafter inventory: `DRAFTER-LAYOUT.md` (3 dense layers, 256-rank RNN Markov head).
 
 Remaining deliverables:

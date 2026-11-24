@@ -111,6 +111,7 @@ probe at `reasoning_effort none`.
 
 | ablation | tensors | PPL | Δ | clean | verdict |
 |---|---:|---:|---:|---:|---|
+| plain residual (no block read, graph hook) | — | **12 877 527** | ~2×10^6 | 0/6 | **the architecture** |
 | block-read queries (`attn_res_query`, `ffn_res_query`, `output_res_query`) | 48 | **731.36** | 112× | 0/6 | **most critical** |
 | relative-position bias (`attn_rel`, `attn_rel_bias`) | 48 | **244.73** | 37× | 0/6 | **positional mechanism** |
 | loop controllers (message gates) | 144 | **13.29** | +103 % | 2/6 | **loop mechanism** |
@@ -119,8 +120,10 @@ probe at `reasoning_effort none`.
 
 Interpretation:
 
-- The **learned block-attention read** is the architecture. Zeroing its queries (making the
-  read a uniform average over the bank) is worse than removing position or the loop messages.
+- The **block-attention residual** is the architecture. Replacing its read with a plain
+  residual destroys the model (PPL 12.9 M); even a uniform read over the bank (query-zero,
+  PPL 731) is far better than no bank. The learned query matters, but the bank itself matters
+  more.
 - The **relative-position bias** is the only positional mechanism; with no RoPE, removing it
   destroys the model.
 - The **cross-pass messages** are what make the three passes different and useful.

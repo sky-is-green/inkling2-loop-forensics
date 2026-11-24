@@ -50,10 +50,10 @@ first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
   doubles PPL (6.53 → 13.29) and drops the probe from 6/6 to 2/6, while the passes, block
   residual and per-pass KV still run. The loop is not a repeated block; the learned message
   channel is what makes later passes useful.
-- **Component order.** Zeroing the block-read queries is catastrophic (PPL 731), the learned
-  relative-position bias is next (245), then the loop controllers (13.3); attention sinks are
-  secondary (7.21, still 6/6). The learned block-attention read and the learned position are
-  the architecture.
+- **Component order.** Replacing the block read with a plain residual gives PPL **12.9 M**;
+  zeroing the read queries (uniform read over the bank) gives 731; the learned
+  relative-position bias gives 245; the loop controllers 13.3; attention sinks are secondary
+  (7.21, still 6/6). The block bank and the learned position are the architecture.
 - **Quantization is expert-bound, and the loop survives it.** IQ4_XS and Q8_K_XL have the
   same PPL (6.53 vs 6.53) because both keep the dominant layers 0–19 experts at NVFP4. At
   2-bit (`Q2_K_XL`, IQ1/IQ2 experts) the trained 3-pass model still gives 6.73 PPL (+2.9 %)
