@@ -1,0 +1,55 @@
+{
+  "experiment": "low-quant-loop-robustness",
+  "date": "2026-11-24",
+  "question": "Do the loop mechanics survive severe lossy compression?",
+  "model": {
+    "quant": "UD-Q2_K_XL",
+    "file": "unsloth/Inkling-2-Mini-GGUF Mainline_Support/Inkling-2-Mini-UD-Q2_K_XL.gguf",
+    "size": 9138716608,
+    "sha256": "b42841608ea380ddde5a3f1125081357128a3c71b80d006246de4e31292fc6c1",
+    "expert_types": "mix of IQ1_S, IQ2_S, IQ2_XS, IQ2_XXS, IQ3_XXS, NVFP4 (11 tensors), a 2-bit Q2 type; the NVFP4 experts of IQ4_XS are largely requantized",
+    "comparison": "UD-IQ4_XS (6.5342 baseline)"
+  },
+  "runtime": {
+    "binary": "scion-llama.cpp build-hip-loop",
+    "commit": "35048268d",
+    "ctx": 2048,
+    "ngl": 99,
+    "one_card": true
+  },
+  "corpus": {
+    "path": "eval/wiki-blue-64k.txt",
+    "sha256": "3c7aa07e5ec63e4c06a5cf39daf54e8b976ac7dda35fa13d8e0ecbe88b2a1394"
+  },
+  "ppl": {
+    "loop2": 10.9952,
+    "loop2_stderr": 0.49021,
+    "loop3": 6.7262,
+    "loop3_stderr": 0.28162,
+    "loop4": 10.6647,
+    "loop4_stderr": 0.45120,
+    "iq4xs": { "loop2": 10.3317, "loop3": 6.5342, "loop4": 9.9125 },
+    "gap_vs_iq4xs": { "loop2": "+6.4%", "loop3": "+2.9%", "loop4": "+7.6%" }
+  },
+  "generation": {
+    "path": "results/q2-loop-gen.json",
+    "loop2": "4/6 clean (logic degenerate)",
+    "loop3": "6/6 clean",
+    "loop4": "4/6 clean (logic and colors no final answer)"
+  },
+  "ablations": {
+    "controllers_zeroed": { "ppl": 14.6268, "stderr": 0.67846, "delta": "+117%" },
+    "block_read_queries_zeroed": { "ppl": 770.9189, "stderr": 70.94705, "delta": "115x" }
+  },
+  "interpretation": [
+    "The trained 3-pass loop survives 2-bit experts: PPL +2.9% vs IQ4_XS and 6/6 on the probe.",
+    "The loop ordering is preserved: 2 and 4 passes are ~60% worse at both quants.",
+    "The quant gap is smallest at the trained 3 passes (2.9%) and larger off-schedule (6.4%/7.6%): the shipped schedule is the most quant-robust point; off-schedule passes amplify error.",
+    "The component hierarchy is unchanged: block-read queries (115x) and message gates (+117%) remain essential."
+  ],
+  "caveats": [
+    "One 2-bit quant, one corpus, six short prompts; hard capability/long context untested.",
+    "The Q2 type mix is dynamic; '2-bit' is an average, not a uniform format.",
+    "PPL includes the padded output vocabulary; constant across the comparisons."
+  ]
+}

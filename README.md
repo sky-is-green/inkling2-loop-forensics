@@ -54,9 +54,11 @@ first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
   relative-position bias is next (245), then the loop controllers (13.3); attention sinks are
   secondary (7.21, still 6/6). The learned block-attention read and the learned position are
   the architecture.
-- **Quantization is expert-bound.** IQ4_XS and Q8_K_XL have the same PPL (6.53 vs 6.53)
-  because both keep the dominant layers 0–19 experts at NVFP4; raising attention/embed and
-  layers 20–23 to BF16 changes nothing measurable.
+- **Quantization is expert-bound, and the loop survives it.** IQ4_XS and Q8_K_XL have the
+  same PPL (6.53 vs 6.53) because both keep the dominant layers 0–19 experts at NVFP4. At
+  2-bit (`Q2_K_XL`, IQ1/IQ2 experts) the trained 3-pass model still gives 6.73 PPL (+2.9 %)
+  and 6/6 on the probe; the loop ordering and the component hierarchy are unchanged. The
+  quant gap is smallest at the trained 3 passes and widens off-schedule.
 - **The drafter is a dense 3-layer block model** with a 256-rank RNN Markov head, four
   target taps (5/23/41/48), block 8, and shared target embeddings/output. Tensor map and
   forward-pass hypothesis: [`docs/DRAFTER-LAYOUT.md`](docs/DRAFTER-LAYOUT.md).

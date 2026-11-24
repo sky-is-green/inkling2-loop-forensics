@@ -149,3 +149,41 @@ MoE on CPU. That is valid for PPL, not for speed.
 
 A true expert-precision control needs a self-converted GGUF with Q4_K/Q5_K experts (or the
 vendor MXFP8 release), not another unsloth quant. That is the next quantization step.
+
+---
+
+# Severe compression: Q2_K_XL
+
+Does the loop survive 2-bit experts? `UD-Q2_K_XL` is 8.51 GiB; its expert tensors are a mix
+of IQ1_S, IQ2_S/XS/XXS, IQ3_XXS, a 2-bit Q2 type and 11 remaining NVFP4 tensors. The IQ4_XS
+NVFP4 experts are largely requantized.
+
+| passes | Q2_K_XL | IQ4_XS | gap |
+|---:|---:|---:|---:|
+| 2 | 10.9952 ± 0.490 | 10.3317 | +6.4 % |
+| **3** | **6.7262 ± 0.282** | **6.5342** | **+2.9 %** |
+| 4 | 10.6647 ± 0.451 | 9.9125 | +7.6 % |
+
+Generation probe: **6/6 clean at loop 3**, 4/6 at loops 2 and 4. The loop ordering and the
+6-prompt quality are preserved.
+
+Ablations at Q2 (loop 3):
+
+| ablation | PPL | Δ |
+|---|---:|---:|
+| loop controllers zeroed | 14.6268 | +117 % |
+| block-read queries zeroed | 770.92 | 115× |
+
+The component hierarchy is unchanged: the block read and the message gates are still the
+architecture.
+
+**Interpretation.** Severe compression costs only 2.9 % PPL at the trained 3-pass point and
+does not break the mechanism. The quant gap is smallest at the trained schedule and widens
+off-schedule (+6.4 % at 2, +7.6 % at 4): off-schedule passes amplify quantization error, but
+the shipped 3-pass loop does not compound it. This is a stronger result than expected — the
+loop is not fragile under 2-bit experts.
+
+**Caveats.** One corpus, six short prompts; hard capability and long context are untested.
+The Q2 type mix is dynamic, so “2-bit” is an average, not a uniform format.
+
+Artifacts: `results/low-quant-q2.json`, `results/q2-loop-gen.json`.

@@ -18,6 +18,7 @@ Results so far (see `LOOP-STUDY.md`):
 - component order: block-read queries (731) > relative bias (245) > loop controllers (13.3)
   > sinks (7.2);
 - quantization is expert-bound: IQ4_XS ≈ Q8_K_XL because both keep experts 0–19 at NVFP4;
+  at 2-bit the trained loop still gives 6.73 PPL and 6/6, with the same component hierarchy;
 - drafter inventory: `DRAFTER-LAYOUT.md` (3 dense layers, 256-rank RNN Markov head).
 
 Remaining deliverables:
