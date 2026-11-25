@@ -1,0 +1,50 @@
+[
+ {
+  "context": 4096,
+  "n_ctx": 5120,
+  "first_tokens": 5120,
+  "total_tokens": 78022,
+  "target_char_end": 160000,
+  "start_char": 139114,
+  "chars": 320888,
+  "target_text_sha256": "76b4da8cd1d7dc6d3b34e63cded10bf61a31fd20e454cef06d821fd8a8c92c4d",
+  "sha256": "1cb30ed86cabe291c2c26d97f7124169de6955e9f949bed149c555d9bce2d64e",
+  "path": "eval/long-context/fixed-target/fixed-target-C4096.txt"
+ },
+ {
+  "context": 8192,
+  "n_ctx": 9216,
+  "first_tokens": 9216,
+  "total_tokens": 82118,
+  "target_char_end": 160000,
+  "start_char": 122157,
+  "chars": 337845,
+  "target_text_sha256": "76b4da8cd1d7dc6d3b34e63cded10bf61a31fd20e454cef06d821fd8a8c92c4d",
+  "sha256": "2af78b3e9898105d97b7a490d7191a5c4ea3e7cc5c3b708967414b46d9a2b477",
+  "path": "eval/long-context/fixed-target/fixed-target-C8192.txt"
+ },
+ {
+  "context": 16384,
+  "n_ctx": 17408,
+  "first_tokens": 17407,
+  "total_tokens": 90309,
+  "target_char_end": 160000,
+  "start_char": 88738,
+  "chars": 371264,
+  "target_text_sha256": "76b4da8cd1d7dc6d3b34e63cded10bf61a31fd20e454cef06d821fd8a8c92c4d",
+  "sha256": "a7b89ca4484baefe3737870a291b20aa704ef29fa37e36dd652d0917b80e11f9",
+  "path": "eval/long-context/fixed-target/fixed-target-C16384.txt"
+ },
+ {
+  "context": 32768,
+  "n_ctx": 33792,
+  "first_tokens": 33792,
+  "total_tokens": 106694,
+  "target_char_end": 160000,
+  "start_char": 25423,
+  "chars": 434579,
+  "target_text_sha256": "76b4da8cd1d7dc6d3b34e63cded10bf61a31fd20e454cef06d821fd8a8c92c4d",
+  "sha256": "c42aaf1a03503fff731179521ae70cfd2874cfac88644764bdc16454a9eca9e3",
+  "path": "eval/long-context/fixed-target/fixed-target-C32768.txt"
+ }
+]

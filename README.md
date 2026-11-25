@@ -8,7 +8,8 @@ map, precision layout, loop semantics, and the questions the study must answer. 
 redistributes no model weights. It is not affiliated with Thinking Machines Lab.
 
 **Status:** Phase B — loop study. The architecture and tensor layout are recovered; the
-first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
+loop-depth, quantization and long-context results are in
+[`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md) and [`docs/LONG-CONTEXT.md`](docs/LONG-CONTEXT.md).
 
 ## What the model is
 
@@ -59,6 +60,11 @@ first loop-depth result is in [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md).
   2-bit (`Q2_K_XL`, IQ1/IQ2 experts) the trained 3-pass model still gives 6.73 PPL (+2.9 %)
   and 6/6 on the probe; the loop ordering and the component hierarchy are unchanged. The
   quant gap is smallest at the trained 3 passes and widens off-schedule.
+- **The loop is a long-context mechanism.** At a fixed 2k target, loop-3 PPL falls as context
+  grows: Q2 7.11 → 6.54 and Q8 6.88 → 6.33 from 4k to 32k. Loop 3 is 1.6–1.8× better than
+  loops 2/4 at every context and the only depth that answers 32k needle probes (3/3 at all
+  depths, both quants); loops 2/4 give 0/3 final answers even with a 2048-token budget.
+  Attention sinks cost ~6–8 % PPL at long context but are not required for retrieval.
 - **The drafter is a dense 3-layer block model** with a 256-rank RNN Markov head, four
   target taps (5/23/41/48), block 8, and shared target embeddings/output. Tensor map and
   forward-pass hypothesis: [`docs/DRAFTER-LAYOUT.md`](docs/DRAFTER-LAYOUT.md).

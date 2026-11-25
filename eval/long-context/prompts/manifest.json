@@ -1,0 +1,146 @@
+[
+ {
+  "id": "needle-8192-d10",
+  "length": 8192,
+  "depth": 10,
+  "chars": 31273,
+  "bytes": 31385,
+  "sha256": "9374a9da7aa1c99b999c962367af664c6c93d1af214a3bbce2a97def2c1099c0",
+  "haystack_chars": 31129,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-8192-d10.txt"
+ },
+ {
+  "id": "needle-8192-d50",
+  "length": 8192,
+  "depth": 50,
+  "chars": 31271,
+  "bytes": 31383,
+  "sha256": "d86bcab3cbb94b4167976fc4458ca9ffb6b4a05ccef624dfb597047e5f708737",
+  "haystack_chars": 31129,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-8192-d50.txt"
+ },
+ {
+  "id": "needle-8192-d90",
+  "length": 8192,
+  "depth": 90,
+  "chars": 31273,
+  "bytes": 31385,
+  "sha256": "1194e94a9f42c208f5326c1a0d60e93bdaa513a83d82a72f156f0cf0057890e8",
+  "haystack_chars": 31129,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-8192-d90.txt"
+ },
+ {
+  "id": "needle-16384-d10",
+  "length": 16384,
+  "depth": 10,
+  "chars": 62403,
+  "bytes": 62597,
+  "sha256": "9f916f899e5a95a33c73642cf74c5027de180e20ea9d68504d1253660557316b",
+  "haystack_chars": 62259,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-16384-d10.txt"
+ },
+ {
+  "id": "needle-16384-d50",
+  "length": 16384,
+  "depth": 50,
+  "chars": 62403,
+  "bytes": 62597,
+  "sha256": "3cb773ee156123d4c0bdfd0afcdbe22d7d77cc7736099f5ae903fa3d723815da",
+  "haystack_chars": 62259,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-16384-d50.txt"
+ },
+ {
+  "id": "needle-16384-d90",
+  "length": 16384,
+  "depth": 90,
+  "chars": 62403,
+  "bytes": 62597,
+  "sha256": "c9c59a1343bb5b399016f98758c03ab257ffecbe105f28a5b9f9e9bd748a94e4",
+  "haystack_chars": 62259,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-16384-d90.txt"
+ },
+ {
+  "id": "needle-32768-d10",
+  "length": 32768,
+  "depth": 10,
+  "chars": 124660,
+  "bytes": 124893,
+  "sha256": "f2b73e6cfd0dc478de1205f0eb14afa8383b80834b5bca162bf5238d3e2180d2",
+  "haystack_chars": 124518,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-32768-d10.txt"
+ },
+ {
+  "id": "needle-32768-d50",
+  "length": 32768,
+  "depth": 50,
+  "chars": 124660,
+  "bytes": 124893,
+  "sha256": "c38c91a266d46b335f563d1e85e39032d10fca7abab9f4b07f5b2da5dd219f2e",
+  "haystack_chars": 124518,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-32768-d50.txt"
+ },
+ {
+  "id": "needle-32768-d90",
+  "length": 32768,
+  "depth": 90,
+  "chars": 124660,
+  "bytes": 124893,
+  "sha256": "efc041acd7a1656e71051786d81ca7f43af9675d4b2ac87b43f258a772c2e312",
+  "haystack_chars": 124518,
+  "needle": "The secret access code for the vault is 7391-ALPHA.",
+  "question": "What is the secret access code for the vault? Answer with the code only.",
+  "expected": [
+   "7391-alpha",
+   "7391"
+  ],
+  "path": "eval/long-context/prompts/needle-32768-d90.txt"
+ }
+]

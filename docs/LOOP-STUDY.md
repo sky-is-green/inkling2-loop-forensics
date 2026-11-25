@@ -127,8 +127,8 @@ Interpretation:
 - The **relative-position bias** is the only positional mechanism; with no RoPE, removing it
   destroys the model.
 - The **cross-pass messages** are what make the three passes different and useful.
-- The **attention sinks** cost 10 % PPL but do not break the six short prompts; they may
-  matter for long context, which is untested here.
+- The **attention sinks** cost 10 % PPL at 2k and ~6–8 % at 8k/16k/32k, but do not break the
+  six short prompts or 32k retrieval (3/3 without them); they are secondary.
 
 Artifacts: `results/component-ablations.json`, `results/{relpos,sinks,resq}-ablation-gen.json`,
 `scripts/zero_tensors.py`.
@@ -186,7 +186,38 @@ off-schedule (+6.4 % at 2, +7.6 % at 4): off-schedule passes amplify quantizatio
 the shipped 3-pass loop does not compound it. This is a stronger result than expected — the
 loop is not fragile under 2-bit experts.
 
-**Caveats.** One corpus, six short prompts; hard capability and long context are untested.
-The Q2 type mix is dynamic, so “2-bit” is an average, not a uniform format.
+**Caveats.** One corpus, six short prompts; hard capability is still untested. Long context is
+tested in the next section. The Q2 type mix is dynamic, so “2-bit” is an average, not a
+uniform format.
 
 Artifacts: `results/low-quant-q2.json`, `results/q2-loop-gen.json`.
+
+
+---
+
+# Long context: the loop uses the context
+
+The 32k study is in [`LONG-CONTEXT.md`](LONG-CONTEXT.md); this is the headline result.
+
+At a **fixed 2k target** (same text, different amounts of preceding context), loop-3 PPL
+falls as context grows:
+
+| nominal C | actual n_ctx | Q2 loop 3 | Q8 loop 3 | Q2 loop 2 | Q8 loop 2 | Q2 loop 4 | Q8 loop 4 |
+|---:|---:|---:|---:|---:|---:|---:|---:|
+| 4k | 5,120 | **7.107** | **6.879** | 12.345 | 11.446 | 11.560 | 11.225 |
+| 8k | 9,216 | **7.049** | **6.765** | 12.281 | 11.393 | 11.532 | 11.075 |
+| 16k | 17,408 | **6.575** | **6.388** | 11.416 | 10.745 | 10.508 | 10.435 |
+| 32k | 33,792 | **6.544** | **6.331** | 11.607 | 10.754 | 10.235 | 10.186 |
+
+- Loop 3 improves by ~8 % from 4k to 32k in both quants; loops 2/4 improve only slightly and
+  stay 1.6–1.8× worse at every context.
+- Needle retrieval at 32k: **loop 3 is 3/3 for both quants at all depths**; loops 2/4 give
+  0/3 final answers, even with a 2048-token budget (they sometimes find the code in
+  reasoning but never emit it).
+- Q2 is only ~3 % worse than Q8 at 32k (6.54 vs 6.33); the loop is quant-robust.
+- Attention sinks cost ~6–8 % PPL at 8k/16k/32k but are not needed for 32k retrieval
+  (3/3 without them).
+
+This makes the loop a plausible long-context mechanism for the 35B, and it makes the 3-pass
+schedule and the block bank non-optional. Method, controls and caveats:
+[`LONG-CONTEXT.md`](LONG-CONTEXT.md); numbers: `results/long-context.json`.

@@ -42,13 +42,34 @@ python3 scripts/size_budget.py
 
 # loop/block/message semantics on a 0.6 M-parameter random model (CPU)
 python3 scripts/trace_loop.py
+
+# long-context eval data (frozen corpus, needles, fixed-target slices)
+python3 scripts/build_needle_prompts.py \
+  --corpus eval/long-context/wikitext-2-raw/wiki.test.raw \
+  --out eval/long-context/prompts
+python3 scripts/make_fixed_target_slices.py
 ```
 
 Dependencies: `numpy` for the scripts; `torch` + `transformers==5.24.0` only for
 `trace_loop.py`. See `requirements.txt`.
 
+## Long-context artifacts
+
+- `eval/long-context/wikitext-2-raw/wiki.test.raw` — WikiText-2 test split, 312,991 tokens,
+  sha256 `173c87a53759e0201f33e0ccf978e510c2042d7f2cb78229d9a50d79b9e7dd08`.
+- `eval/long-context/prompts/manifest.json` — 9 needle prompts (8k/16k/32k × 10/50/90 %),
+  hashes and expected answer.
+- `eval/long-context/fixed-target/manifest.json` — four slices ending at the same paragraph
+  boundary; nominal 4k/8k/16k/32k, actual `n_ctx` 5,120/9,216/17,408/33,792.
+- `results/long-context.json` — curated PPL, needle, sink and control results.
+
+The raw run logs and the full per-prompt records are kept outside this repo. PPL at 32k
+used a streaming-NLL strided perplexity pass so the full-context logits tensor was never
+materialised on the host.
+
 ## Provenance
 
 Every tensor count, dtype and shape in `docs/ARCHITECTURE.md` comes from
-`vendor/inkling-header.bin` or from a meta-device build of `transformers` 5.24.0. Nothing
-here was measured on a GPU.
+`vendor/inkling-header.bin` or from a meta-device build of `transformers` 5.24.0. The
+long-context numbers in `results/long-context.json` were measured on the unsloth GGUFs with
+the patched llama.cpp runtime; they are model behaviour, not runtime/port benchmarks.

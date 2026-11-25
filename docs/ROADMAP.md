@@ -21,10 +21,15 @@ Results so far (see `LOOP-STUDY.md`):
   at 2-bit the trained loop still gives 6.73 PPL and 6/6, with the same component hierarchy;
 - block residual: replacing the read with a plain residual gives PPL 12.9 M, the strongest
   component result;
-- long-context hypothesis recorded in `LONG-CONTEXT.md`; overnight run pending;
+- long context: at a fixed 2k target, loop-3 PPL improves from 7.11 to 6.54 (Q2) and 6.88 to
+  6.33 (Q8) from 4k to 32k; loop 3 is the only depth that answers 32k needles (3/3, both
+  quants), while loops 2/4 give 0/3 even with 2048 generated tokens; sinks cost ~6–8 % PPL
+  but do not gate retrieval. See `LONG-CONTEXT.md`;
 - drafter inventory: `DRAFTER-LAYOUT.md` (3 dense layers, 256-rank RNN Markov head).
 
 Remaining deliverables:
+- 64k/128k long-context check on Q2 if memory allows, plus a harder long-document QA set;
+- why loops 2/4 fail at 32k: is it the message channel, the block bank, or the pass schedule?
 - loop 1/2/3 capability and compute table on a frozen prompt set;
 - component ablations (message gates, block residual, per-pass KV, controllers, sinks,
   relative bias vs RoPE);

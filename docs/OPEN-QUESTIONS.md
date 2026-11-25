@@ -50,14 +50,27 @@ negative result, or a design decision recorded in these docs.
 
 ## D. Long context
 
-13. **Is the loop a long-context fix?** The block bank gives each sublayer access to block
-    summaries instead of one residual stream; the relative bias is local (1024) and the
-    per-pass KV triples the core cache. Test at 8k/16k/32k, PPL by position bucket, needle
-    retrieval and decode cost. Hypothesis and protocol: `LONG-CONTEXT.md`. Not run yet.
+13. **Is the loop a long-context fix?** **Yes at 32k.** At a fixed 2k target, loop-3 PPL
+    improves from 7.11 to 6.54 (Q2) and 6.88 to 6.33 (Q8) from 4k to 32k. Loop 3 is 1.6–1.8×
+    better than loops 2/4 at every context and the only depth that answers 32k needles
+    (3/3, both quants); loops 2/4 give 0/3 final answers even with a 2048-token budget.
+    Remaining: 64k/128k, a harder long-document QA set, and why loops 2/4 fail (message
+    channel vs block bank vs schedule). Results: `LONG-CONTEXT.md`.
 
-## E. 35B and numerics
+## E. Long-context mechanism
 
-14. **35B design.** Which 12 layers form the core (8–19, 10–29, 14–25), 2 or 3 passes, and
+16. **Why do loops 2 and 4 fail at 32k?** They sometimes find the code in reasoning but do
+    not emit it. Is the message channel too weak at two passes, or does the fourth pass
+    over-write the retrieved state? Probe the per-pass block bank and message vectors on the
+    32k needles.
+17. **Do the sinks matter at 64k+?** They cost ~6–8 % PPL at 8k/16k/32k but are not needed
+    for 32k retrieval. Test 64k/128k if Q2 fits.
+18. **Does the result survive a harder long-document QA set?** The needle is synthetic and
+    the haystack is wiki prose; add multi-hop and code-repo retrieval.
+
+## F. 35B and numerics
+
+19. **35B design.** Which 12 layers form the core (8–19, 10–29, 14–25), 2 or 3 passes, and
     which components survive ablation? What is the distillation recipe and the eval gate?
-15. **Numerics.** F32 block states, softcaps, L2 clips, router precision, sinks: what is the
+20. **Numerics.** F32 block states, softcaps, L2 clips, router precision, sinks: what is the
     minimum precision that preserves the reference logits, and where does the loop need F32?

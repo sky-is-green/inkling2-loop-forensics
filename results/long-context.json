@@ -1,0 +1,238 @@
+{
+ "experiment": "long-context-loop-study",
+ "date": "2026-11-25",
+ "question": "Does the trained 3-pass loop hold up as context grows, and is it a plausible long-context mechanism for the 35B?",
+ "models": {
+  "q2": {
+   "quant": "UD-Q2_K_XL",
+   "sha256": "b42841608ea380ddde5a3f1125081357128a3c71b80d006246de4e31292fc6c1",
+   "note": "2-bit expert mix; one 20 GB card, full GPU offload, f16 KV"
+  },
+  "q8": {
+   "quant": "UD-Q8_K_XL",
+   "sha256": "2da51788d43a17e1f033bec420fa83ba9cb87ac1f0130dc9135a4d2ed2678b68",
+   "note": "8-bit; 32k requires CPU-offloaded experts on a 20 GB card, so the fair Q8 runs use the stable 16-layer offload configuration"
+  }
+ },
+ "corpus": {
+  "path": "eval/long-context/wikitext-2-raw/wiki.test.raw",
+  "sha256": "173c87a53759e0201f33e0ccf978e510c2042d7f2cb78229d9a50d79b9e7dd08",
+  "tokens": 312991,
+  "source": "https://huggingface.co/datasets/ggml-org/ci/resolve/main/wikitext-2-raw-v1.zip"
+ },
+ "fixed_target": {
+  "method": "Each slice ends at the same paragraph boundary. The 2048-token target at the end of the first n_ctx tokens is therefore identical across context lengths. Nominal C uses n_ctx = C + 1024 because the strided harness adds stride/2.",
+  "nominal_contexts": [
+   4096,
+   8192,
+   16384,
+   32768
+  ],
+  "actual_n_ctx": [
+   5120,
+   9216,
+   17408,
+   33792
+  ],
+  "target_tokens": 2048,
+  "q2": {
+   "loop3": [
+    7.1074,
+    7.0486,
+    6.5745,
+    6.5442
+   ],
+   "loop2": [
+    12.3452,
+    12.2806,
+    11.416,
+    11.6067
+   ],
+   "loop4": [
+    11.5604,
+    11.5321,
+    10.5077,
+    10.235
+   ]
+  },
+  "q8": {
+   "loop3": [
+    6.8794,
+    6.7645,
+    6.3882,
+    6.3312
+   ],
+   "loop2": [
+    11.446,
+    11.3925,
+    10.7447,
+    10.7537
+   ],
+   "loop4": [
+    11.2249,
+    11.0752,
+    10.435,
+    10.1859
+   ]
+  }
+ },
+ "broad_ppl": {
+  "note": "These runs score different target spans and different numbers of 2k blocks. They are useful as a position/context survey, not as a clean context-length comparison; use fixed_target for that.",
+  "q2": {
+   "loop3": {
+    "2048": 6.4674,
+    "8192": 5.0685,
+    "16384": 5.7337,
+    "32768": 6.3811
+   },
+   "loop2": {
+    "2048": 11.157,
+    "8192": 8.2472,
+    "32768": 11.0291
+   },
+   "loop4": {
+    "2048": 10.1221,
+    "8192": 8.3016,
+    "32768": 9.9667
+   }
+  },
+  "q8_fair": {
+   "loop3": {
+    "2048": 5.4353,
+    "8192": 4.254,
+    "16384": 5.3398,
+    "32768": 5.9211
+   },
+   "loop2": {
+    "8192": 9.4963,
+    "32768": 10.4146
+   },
+   "loop4": {
+    "8192": 9.022,
+    "32768": 10.188
+   }
+  },
+  "q8_offload20_exploratory": {
+   "note": "The initial overnight Q8 matrix used 20 CPU MoE layers. PPL is stable through 16 layers and jumps at 18; these numbers are not used for quant comparison. The loop ordering and needle outcomes from this run still matched Q2 and the fair Q8 reruns.",
+   "loop3": {
+    "2048": 5.7904,
+    "8192": 4.8003,
+    "16384": 5.6628,
+    "32768": 6.8008
+   },
+   "loop2": {
+    "8192": 10.078,
+    "32768": 10.1552
+   },
+   "loop4": {
+    "8192": 9.1028,
+    "32768": 9.7016
+   }
+  }
+ },
+ "needles": {
+  "method": "Synthetic code 7391-ALPHA inserted at 10/50/90% of a wikitext-2 haystack; greedy, reasoning enabled, final-answer content scored. The 32k off-schedule runs were repeated with a 2048-token generation budget to rule out truncation.",
+  "q2": {
+   "8192": {
+    "loop3": "3/3"
+   },
+   "16384": {
+    "loop3": "3/3"
+   },
+   "32768": {
+    "loop3": "3/3",
+    "loop2": "0/3 final, 1/3 code in reasoning",
+    "loop4": "0/3 final, 0/3 reasoning",
+    "loop2_2048": "0/3 final, 1/3 reasoning",
+    "loop4_2048": "0/3 final"
+   }
+  },
+  "q8": {
+   "8192": {
+    "loop3": "3/3"
+   },
+   "16384": {
+    "loop3": "3/3"
+   },
+   "32768": {
+    "loop3": "3/3",
+    "loop2": "0/3 final, 2/3 code in reasoning",
+    "loop4": "0/3 final, 1/3 reasoning",
+    "loop2_2048": "0/1 final, code present in reasoning",
+    "loop4_2048": "0/1 final, code absent"
+   }
+  },
+  "q8_fair_32k_confirmation": {
+   "loop3_d50": "1/1 final"
+  },
+  "sinks_32k": {
+   "loop3": "3/3"
+  }
+ },
+ "ablations": {
+  "sinks": {
+   "matched_chunks": true,
+   "q2_loop3_ppl": {
+    "8192": {
+     "baseline": 4.4359,
+     "no_sinks": 4.7965,
+     "delta": "+8.1%"
+    },
+    "16384": {
+     "baseline": 5.5491,
+     "no_sinks": 5.8918,
+     "delta": "+6.2%"
+    },
+    "32768": {
+     "baseline": 6.0642,
+     "no_sinks": 6.4698,
+     "delta": "+6.7%"
+    }
+   },
+   "retrieval_32k": "3/3",
+   "verdict": "A modest PPL cost at long context, but not required for retrieval. Secondary."
+  },
+  "kv_precision": {
+   "q2_32k_f16": 6.0642,
+   "q2_32k_q8_kv": 6.0629,
+   "delta": "-0.02%",
+   "verdict": "KV precision is not the mechanism."
+  }
+ },
+ "controls": {
+  "q8_offload_2k_ppl_by_ncmoe": {
+   "6": 4.9291,
+   "8": 4.931,
+   "10": 4.948,
+   "12": 4.9584,
+   "14": 4.9732,
+   "16": 4.9919,
+   "17": 5.0679,
+   "18": 6.6597,
+   "20": 6.6462
+  },
+  "q8_offload_note": "Stable through 17 layers, sharp break at 18. The fair Q8 32k runs use 16 layers; the initial 20-layer matrix is exploratory only."
+ },
+ "findings": [
+  "At a fixed 2k target, loop-3 PPL falls monotonically as context grows: Q2 7.107 -> 6.544 and Q8 6.879 -> 6.331 from 4k to 32k. The loop uses the longer context; it does not degrade.",
+  "Loop 3 is 1.6-1.8x better than loops 2 and 4 at every fixed-target context, and it is the only schedule that reliably emits a 32k needle answer (3/3 at all depths for both quants).",
+  "Loops 2 and 4 fail at 32k even with a 2048-token generation budget. They sometimes locate the code in reasoning but do not emit a final answer. The trained 3-pass schedule is essential, not cosmetic.",
+  "Q8 is slightly better than Q2 at every fixed-target context (6.33 vs 6.54 at 32k, ~3%). The loop survives 2-bit experts and benefits modestly from higher weight precision.",
+  "Attention sinks cost ~6-8% PPL at 8k/16k/32k but are not needed for 32k retrieval. They are secondary to the block bank and the loop message gates.",
+  "The earlier Q8 20-layer-offload PPL was an execution-path artifact: Q8 PPL is stable through 16-17 offloaded MoE layers and breaks at 18. The fair Q8 reruns use 16 layers."
+ ],
+ "caveats": [
+  "One corpus (wikitext-2 test), one fixed target region, one 2k scored target. Absolute PPL is not comparable to the earlier wiki-blue corpus.",
+  "The needle is synthetic and the haystack is wiki prose; a harder long-document QA set is still needed.",
+  "Nominal 4k/8k/16k/32k use actual contexts 5.1k/9.2k/17.4k/33.8k because the strided harness adds 1024 tokens.",
+  "Q8 32k requires a CPU-offloaded expert configuration on the 20 GB card. The fair runs use the stable 16-layer configuration; this is a measurement configuration, not a deployment recommendation.",
+  "The 2048-token off-schedule rerun covered all Q2 depths and the Q8 50% depth; the Q8 10/90% off-schedule cases still used the shorter budget.",
+  "The loop-2/4 failure is a final-answer failure, not always a retrieval failure; reasoning sometimes contains the code.",
+  "The 16k slice tokenizes to 17,407 tokens before the boundary; the harness consumes one extra boundary token. The other three slices hit the exact count, and the same target text is used throughout."
+ ],
+ "what_it_means_for_35b": [
+  "The loop is a plausible long-context fix: it improves prediction as context grows and preserves retrieval at 32k, unlike a shared-core-only or off-schedule loop.",
+  "The 35B loop must keep the block-attention bank and the trained 3-pass schedule. The 2k ablations already made the bank non-optional; the long-context data makes the depth schedule non-optional too.",
+  "The next long-context step is 64k/128k on Q2 if memory allows, plus a harder long-document QA set and a 35B-scale check."
+ ]
+}

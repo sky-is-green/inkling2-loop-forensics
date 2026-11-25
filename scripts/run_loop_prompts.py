@@ -18,6 +18,7 @@ import argparse
 import json
 import os
 import re
+import shlex
 import subprocess
 import sys
 from pathlib import Path
@@ -67,6 +68,9 @@ def main() -> int:
     ap.add_argument("--ctx", type=int, default=2048)
     ap.add_argument("--out", default=str(ROOT / "results" / "loop-gen.json"))
     ap.add_argument("--logs", default=str(ROOT / "logs"))
+    ap.add_argument("--extra", default="", help="extra llama-cli arguments (shell-quoted)")
+    ap.add_argument("--tag", default="", help="prefix for log file names")
+    ap.add_argument("--match-reasoning", action="store_true", help="also match expected strings in reasoning_content")
     args = ap.parse_args()
 
     prompts = json.loads(Path(args.prompts).read_text())
@@ -77,7 +81,8 @@ def main() -> int:
     results = []
     for loop in loops:
         for p in prompts:
-            log = logs / f"loopgen-{loop}-{p['id']}.log"
+            prefix = f"{args.tag}-" if args.tag else ""
+            log = logs / f"{prefix}loopgen-{loop}-{p['id']}.log"
             cmd = [
                 args.gpu_run, args.gpu_guard, args.llama_cli,
                 "-m", args.model,
@@ -89,6 +94,8 @@ def main() -> int:
                 "-c", str(args.ctx),
                 "-v",
             ]
+            if args.extra:
+                cmd += shlex.split(args.extra)
             if loop != 3:
                 cmd += ["--override-kv", f"inkling2_loop.loop.count=int:{loop}"]
             env = dict(os.environ)
@@ -101,6 +108,8 @@ def main() -> int:
             reasoning = clean(msg.get("reasoning_content", ""))
             exp = [e.lower() for e in p.get("expected", [])]
             low = content.lower()
+            if args.match_reasoning:
+                low = (content + "\n" + reasoning).lower()
             match = any(e in low for e in exp) if exp else None
             results.append({
                 "loop": loop,
