@@ -18,9 +18,11 @@ negative result, or a design decision recorded in these docs.
    - relative-position bias vs a RoPE baseline;
    - attention sinks; q/k L2 clips; log scaling; static vs dynamic short conv.
    Ablate in the reference runtime.
-4. **How much of the gain is trained behavior?** The core is applied 3×, but the weights
-   were trained with that schedule. A loop added post-hoc to a non-looped model may not
-   reproduce the gain. This is the central risk for the 35B port.
+4. **How much of the gain is trained behavior?** **At small scale, essentially all of it.**
+   With the reference implementation at 23.4M parameters, a 3-pass-trained model is best
+   at 3, while a 1-pass control is flat across 1/2/3/4 inference passes. The 3-pass model
+   is also much worse when evaluated at 1 pass. See `SMALL-MODEL-REPRO.md`. This is the
+   central risk for the 35B port and the reason the 35B needs a training run.
 
 ## B. Quantization across passes
 
@@ -74,3 +76,7 @@ negative result, or a design decision recorded in these docs.
     which components survive ablation? What is the distillation recipe and the eval gate?
 20. **Numerics.** F32 block states, softcaps, L2 clips, router precision, sinks: what is the
     minimum precision that preserves the reference logits, and where does the loop need F32?
+21. **Does the depth preference survive at 35B scale?** At 23M the 4-pass penalty is only
+    +2.2 % vs +52 % at 26B. Is the 3-pass advantage stronger at larger scale, or does it
+    depend on the training budget/data? The 35B pilot must measure 2/3/4 rather than
+    inherit the 26B gap.

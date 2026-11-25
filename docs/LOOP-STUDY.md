@@ -221,3 +221,32 @@ falls as context grows:
 This makes the loop a plausible long-context mechanism for the 35B, and it makes the 3-pass
 schedule and the block bank non-optional. Method, controls and caveats:
 [`LONG-CONTEXT.md`](LONG-CONTEXT.md); numbers: `results/long-context.json`.
+
+---
+
+# Small-model reproduction (23M)
+
+We retrained the reference `inkling2_loop` implementation from scratch at **23.4M
+parameters** on WikiText-103 to test whether the loop behavior is a trained prior or a
+runtime trick. Full method and caveats: [`SMALL-MODEL-REPRO.md`](SMALL-MODEL-REPRO.md);
+numbers: `results/tiny-loop-repro.json`.
+
+At 120M tokens, the 3-pass-trained model is best at 3 passes:
+
+| eval passes | PPL |
+|---:|---:|
+| 1 | 52.81 |
+| 2 | 40.75 |
+| **3** | **36.61** |
+| 4 | 37.42 |
+
+A 1-pass control at the same 82M checkpoint is flat across inference passes
+(41.41 / 41.45 / 41.44 / 41.45), and is still flat at 90M. The 3-pass model is much
+worse at 1 pass (56.38), so the trained schedule is part of the function.
+
+Ablations on the 3-pass model at 3 passes: block-bank queries **381.05** (+879 %),
+message gates **56.41** (+44.9 %), shared message read **39.53** (+1.6 %); baseline
+38.92. The bank and per-layer gates are load-bearing at small scale too.
+
+The one scale caveat: 4 passes is only +2.2 % behind 3 here, versus +52 % on the 26B
+model. The depth preference is real but scale/training-dependent.

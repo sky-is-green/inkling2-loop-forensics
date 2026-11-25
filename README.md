@@ -65,6 +65,13 @@ loop-depth, quantization and long-context results are in
   loops 2/4 at every context and the only depth that answers 32k needle probes (3/3 at all
   depths, both quants); loops 2/4 give 0/3 final answers even with a 2048-token budget.
   Attention sinks cost ~6–8 % PPL at long context but are not required for retrieval.
+- **The loop is a trained prior, not a runtime trick.** We reproduced the qualitative
+  behavior with the reference `inkling2_loop` implementation at **23.4 M parameters** on
+  WikiText-103: the 3-pass-trained model is best at 3 (PPL **36.61** at 120 M tokens), a
+  1-pass control is flat across 1/2/3/4 passes at 82 M (41.41/41.45/41.44/41.45), and
+  zeroing block-bank queries gives **+879 %** / message gates **+44.9 %**. The 4-pass
+  penalty is only +2.2 % at this scale vs +52 % at 26 B, so the depth preference is
+  real but scale-dependent. [`docs/SMALL-MODEL-REPRO.md`](docs/SMALL-MODEL-REPRO.md)
 - **The drafter is a dense 3-layer block model** with a 256-rank RNN Markov head, four
   target taps (5/23/41/48), block 8, and shared target embeddings/output. Tensor map and
   forward-pass hypothesis: [`docs/DRAFTER-LAYOUT.md`](docs/DRAFTER-LAYOUT.md).

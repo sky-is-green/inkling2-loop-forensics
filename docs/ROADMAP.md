@@ -25,10 +25,15 @@ Results so far (see `LOOP-STUDY.md`):
   6.33 (Q8) from 4k to 32k; loop 3 is the only depth that answers 32k needles (3/3, both
   quants), while loops 2/4 give 0/3 even with 2048 generated tokens; sinks cost ~6–8 % PPL
   but do not gate retrieval. See `LONG-CONTEXT.md`;
+- small-model reproduction (23.4M, WikiText-103, reference implementation): the 3-pass
+  model is best at 3 (36.61 PPL at 120M), a 1-pass control is flat across 1/2/3/4 at 82M,
+  and block-bank/message ablations reproduce. See `SMALL-MODEL-REPRO.md`;
 - drafter inventory: `DRAFTER-LAYOUT.md` (3 dense layers, 256-rank RNN Markov head).
 
 Remaining deliverables:
 - 64k/128k long-context check on Q2 if memory allows, plus a harder long-document QA set;
+- a 35B loop transplant pilot: initialize the loop from the 35B's own core, add the
+  bank/messages, train with distillation, and measure the depth preference at scale;
 - why loops 2/4 fail at 32k: is it the message channel, the block bank, or the pass schedule?
 - loop 1/2/3 capability and compute table on a frozen prompt set;
 - component ablations (message gates, block residual, per-pass KV, controllers, sinks,
@@ -51,9 +56,10 @@ This answers whether the drafter is reproducible from the released weights, or w
 
 ## Phase D — 35B loop design
 
-Only after B/C.
+Only after B/C. The small-model result makes the training-first path the default: a
+runtime-only loop on the existing weights is not supported by the evidence.
 
-- core selection (8–19, 10–29, 14–25), 2 vs 3 passes;
+- core selection (8–19, 10–29, 14–25 or a block-aligned span), 2 vs 3 passes;
 - distillation from the 35B BF16 teacher, deep supervision across passes;
 - eval on hard-subset30, coding10, PPL, tools; capability outranks PPL;
 - pod proposal and approval before any training.

@@ -1,0 +1,95 @@
+{
+ "experiment": "small-model-loop-reproduction",
+ "date": "2026-11-25",
+ "question": "Does the trained-loop depth/gate/bank behavior reproduce at small scale with the reference implementation?",
+ "model": {
+  "implementation": "transformers==5.24.0 models/inkling2_loop",
+  "physical_layers": 8,
+  "loop_core": "layers 2-6 (4 layers, 2 blocks of 2)",
+  "passes": 3,
+  "control_passes": 1,
+  "applications": 16,
+  "hidden_size": 256,
+  "heads": 8,
+  "kv_heads": 4,
+  "head_dim": 32,
+  "experts": 8,
+  "experts_per_tok": 2,
+  "expert_intermediate": 256,
+  "sliding_window": 128,
+  "block_size": 2,
+  "message_gate_rank": 8,
+  "vocab_size": 16384,
+  "parameters": 23420928
+ },
+ "data": {
+  "name": "WikiText-103 raw",
+  "source": "Salesforce/wikitext",
+  "tokenizer": "16k byte-level BPE trained on a 50M-char sample",
+  "train_tokens": 122718173,
+  "val_tokens": 256989,
+  "test_tokens": 293199,
+  "train_parquet_sha256": ["74da360f23826045b3e6ac6375411fdb15f003030aa74f2596ed08b857cb9212", "ba090ac30dbf5461e8dcbdd1a1b8e6f3cf9c2c756d64f0c1220450acd514f720"],
+  "val_parquet_sha256": "204929b7ff9d6184953f867dedb860e40aa69c078fc1e54b3baaa8fb28511c4c",
+  "token_array_sha256": {
+   "train": "fab5d5ed2bf9fdcf30376d13ced2f133c60a7b73e69f410fe7a04dfc9166038f",
+   "validation": "ffb5f32c4158489ad8f64251a02e306070819d2bc360900adc32386886f5288a",
+   "test": "d1f97e278560499fd142c98be2e5a67a76e0abd5a45b031f6b6b0b6252e93fd0"
+  }
+ },
+ "training": {
+  "tokens_per_model": 120000000,
+  "batch": 16,
+  "ctx": 256,
+  "optimizer": "AdamW",
+  "lr": 0.0003,
+  "schedule": "cosine to 10%",
+  "warmup": 500,
+  "weight_decay": 0.1,
+  "grad_clip": 1.0,
+  "seed": 0
+ },
+ "depth_120m": {
+  "trained_passes": 3,
+  "ppl": {"1": 52.8136, "2": 40.7524, "3": 36.6075, "4": 37.4165},
+  "delta_vs_3": {"1": "+44.3%", "2": "+11.3%", "4": "+2.2%"}
+ },
+ "control_82m": {
+  "note": "Same token checkpoint for both models. The 1-pass control is flat across inference passes; the 3-pass model is much worse when its trained passes are removed.",
+  "trained_3": {"1": 56.38, "2": 44.80, "3": 40.81, "4": 41.47},
+  "trained_1": {"1": 41.41, "2": 41.45, "3": 41.44, "4": 41.45}
+ },
+ "control_90m_note": {
+  "trained_1": {"1": 40.33, "2": 40.32, "3": 40.35, "4": 40.32},
+  "note": "The 1-pass run reached 90M tokens before a display-GPU hang stopped it; the depth curve was already flat. The 82M checkpoint is the reproducible comparison."
+ },
+ "ablations": {
+  "eval_pass": 3,
+  "eval_batches": 8,
+  "baseline": 38.923,
+  "message_gates_zeroed": {"ppl": 56.405, "delta_pct": 44.9, "tensors": 48},
+  "message_read_zeroed": {"ppl": 39.531, "delta_pct": 1.6, "tensors": 1},
+  "block_queries_zeroed": {"ppl": 381.053, "delta_pct": 879.0, "tensors": 16},
+  "both": {"ppl": 280.154, "delta_pct": 619.8, "tensors": 64}
+ },
+ "findings": [
+  "The 3-pass-trained model is best at 3 passes at 120M tokens: 36.61 PPL vs 40.75 at 2 (+11.3%), 37.42 at 4 (+2.2%), and 52.81 at 1 (+44.3%).",
+  "The 1-pass control is flat across 1/2/3/4 passes at 82M (41.41/41.45/41.44/41.45) and at 90M (40.33/40.32/40.35/40.32). Extra inference passes do not help a model trained without the loop.",
+  "The 3-pass model is much worse at 1 pass (56.38 at 82M; 52.81 at 120M), showing that the trained schedule is part of the function, not an optional inference setting.",
+  "The block-bank read is the dominant component at small scale: zeroing the read queries gives 381.05 PPL (+879%). The per-layer message gates cost +44.9%; the shared message-read query alone costs +1.6%.",
+  "The 4-pass penalty is much smaller than at 26B (+2.2% here vs +52% there). The depth preference is real but scale/training dependent; the 35B pilot must measure it rather than assume the 26B gap.",
+  "This reproduces the 26B qualitative story at 23M: the loop is a trained prior; the bank and message channel are load-bearing; the architecture is portable but the weights are not."
+ ],
+ "caveats": [
+  "One seed, 23M parameters, WikiText-103, 256-token context.",
+  "16k BPE and a 128-token sliding window are scaled ratios, not the 26B model's exact tokenizer/window.",
+  "The 1-pass control was stopped at 90M tokens by a display-GPU hang; the 82M checkpoint is the reproducible same-token comparison.",
+  "The ablation baseline (38.92, 8 eval batches) and the depth table (36.61, 4 eval batches) use different validation subsets.",
+  "This is a mechanism reproduction, not a capability or long-context claim."
+ ],
+ "artifacts": {
+  "scripts": ["scripts/prepare_wikitext.py", "scripts/train_tiny_loop.py", "scripts/ablate_tiny_loop.py", "scripts/plot_tiny_loop.py"],
+  "checkpoints": "outside the repo: ~/Desktop/scion-loop-work/runs/tiny-loop-{p3,p1}/",
+  "data": "outside the repo: ~/Desktop/scion-loop-work/data/wikitext-103/"
+ }
+}
