@@ -9,9 +9,9 @@ Ablations:
 
 Example:
   python scripts/ablate_tiny_loop.py \
-    --checkpoint ~/Desktop/scion-loop-work/runs/tiny-loop-p3/model.pt \
-    --val .../validation.u16 --manifest .../manifest.json \
-    --out ~/Desktop/scion-loop-work/runs/tiny-loop-p3/ablation.json
+    --checkpoint "$RUN_DIR/tiny-loop-p3/model.pt" \
+    --val "$DATA_DIR/tokenized/validation.u16" --manifest "$DATA_DIR/tokenized/manifest.json" \
+    --out "$RUN_DIR/tiny-loop-p3/ablation.json"
 """
 import argparse
 import json

@@ -8,6 +8,11 @@ same paragraph boundary; the text after that boundary is only there to satisfy
 the tool's 2*n_ctx validation and is never scored.
 
 Token counts come from llama-tokenize (same model tokenizer as the eval).
+
+Example:
+  python3 scripts/make_fixed_target_slices.py \
+    --model /path/to/Inkling-2-Mini.gguf \
+    --tokenize /path/to/llama-tokenize
 """
 import argparse
 import hashlib
@@ -18,8 +23,6 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-DEFAULT_MODEL = Path("/run/media/penis/cbfa1404-241a-484e-9136-de07ee2fa8ad/work/models-inkling/gguf/Mainline_Support/Inkling-2-Mini-UD-Q2_K_XL.gguf")
-DEFAULT_TOKENIZE = Path("/run/media/penis/cbfa1404-241a-484e-9136-de07ee2fa8ad/work/scion-llama.cpp/build-hip-loop/bin/llama-tokenize")
 DEFAULT_CORPUS = ROOT / "eval/long-context/wikitext-2-raw/wiki.test.raw"
 
 
@@ -44,8 +47,8 @@ def count_tokens(tokenize: Path, model: Path, text: str) -> int:
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--corpus", default=str(DEFAULT_CORPUS))
-    ap.add_argument("--model", default=str(DEFAULT_MODEL))
-    ap.add_argument("--tokenize", default=str(DEFAULT_TOKENIZE))
+    ap.add_argument("--model", required=True)
+    ap.add_argument("--tokenize", required=True)
     ap.add_argument("--out", default=str(ROOT / "eval/long-context/fixed-target"))
     ap.add_argument("--contexts", default="4096,8192,16384,32768")
     ap.add_argument("--stride", type=int, default=2048)

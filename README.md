@@ -11,6 +11,8 @@ redistributes no model weights. It is not affiliated with Thinking Machines Lab.
 loop-depth, quantization and long-context results are in
 [`docs/LOOP-STUDY.md`](docs/LOOP-STUDY.md) and [`docs/LONG-CONTEXT.md`](docs/LONG-CONTEXT.md).
 
+**Hugging Face dataset:** https://huggingface.co/datasets/SkyIsNotGreen/inkling2-loop-forensics
+
 ## What the model is
 
 | property | value |
@@ -88,10 +90,15 @@ loop-depth, quantization and long-context results are in
 | `docs/OPEN-QUESTIONS.md` | the analysis questions this repo exists to answer |
 | `docs/ROADMAP.md` | loop study, drafter reconstruction, 35B implications |
 | `docs/REPRODUCIBILITY.md` | artifacts, hashes, tools, commands |
+| `docs/LONG-CONTEXT.md` | 32k fixed-target PPL, needle retrieval, sinks |
+| `docs/SMALL-MODEL-REPRO.md` | 23.4M reference-model reproduction |
+| `hf/README.md` | Hugging Face dataset card |
+| `figures/` | tiny-loop depth and ablation figures |
 | `vendor/` | config, quant config, safetensors index + 2 MB header, chat template |
 | `eval/` | frozen corpus and prompt set |
 | `scripts/` | tensor-map parser, size budget, toy loop trace, loop-depth runner |
 | `results/` | tensor map JSON, HF state-dict names, loop-depth results |
+| `LICENSES.md` | code, data and vendor licensing |
 
 Large artifacts (GGUFs, safetensors, logs) are gitignored and live outside the repository;
 see `vendor/MANIFEST.md` for URLs, sizes and hashes.
@@ -114,6 +121,12 @@ python3 scripts/size_budget.py
 # loop semantics on a 0.6 M-parameter random model (CPU, no weights)
 python3 scripts/trace_loop.py
 ```
+
+## Licenses
+
+Code and original analysis are Apache-2.0. The Wikipedia-derived evaluation text and
+fixed-target slices are CC BY-SA 3.0. Vendor metadata is Apache-2.0 and contains no weights.
+See [`LICENSES.md`](LICENSES.md).
 
 The model is Apache-2.0. The vendor config/header files here are metadata kept for
 interoperability and analysis; no weights are redistributed.

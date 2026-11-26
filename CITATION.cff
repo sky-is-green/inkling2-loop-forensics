@@ -7,3 +7,4 @@ license: Apache-2.0
 repository-code: "https://github.com/sky-is-green/inkling2-loop-forensics"
 authors:
   - name: "sky-is-green"
+notes: "Code Apache-2.0; Wikipedia-derived evaluation data CC BY-SA 3.0; vendor metadata Apache-2.0 with no weights."

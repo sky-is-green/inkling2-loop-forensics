@@ -105,36 +105,42 @@ with smaller magnitudes.
 
 ## Reproduce
 
+Set `DATA_DIR` to wherever you keep the raw WikiText-103 parquet files and `RUN_DIR` to
+where you want checkpoints/results. Neither is included in this repository.
+
 ```bash
 # data (outside this repo)
 python3 scripts/prepare_wikitext.py \
-  --data-dir ~/Desktop/scion-loop-work/data/wikitext-103 \
-  --out-dir  ~/Desktop/scion-loop-work/data/wikitext-103/tokenized
+  --data-dir $DATA_DIR \
+  --out-dir  $DATA_DIR/tokenized
 
 # 3-pass model
 python3 scripts/train_tiny_loop.py \
-  --train  .../train.u16 --val .../validation.u16 \
-  --manifest .../manifest.json \
-  --out ~/Desktop/scion-loop-work/runs/tiny-loop-p3 \
+  --train  $DATA_DIR/tokenized/train.u16 \
+  --val    $DATA_DIR/tokenized/validation.u16 \
+  --manifest $DATA_DIR/tokenized/manifest.json \
+  --out $RUN_DIR/tiny-loop-p3 \
   --passes 3 --tokens 120000000
 
 # 1-pass control
 python3 scripts/train_tiny_loop.py \
-  --train  .../train.u16 --val .../validation.u16 \
-  --manifest .../manifest.json \
-  --out ~/Desktop/scion-loop-work/runs/tiny-loop-p1 \
+  --train  $DATA_DIR/tokenized/train.u16 \
+  --val    $DATA_DIR/tokenized/validation.u16 \
+  --manifest $DATA_DIR/tokenized/manifest.json \
+  --out $RUN_DIR/tiny-loop-p1 \
   --passes 1 --tokens 120000000
 
 # ablations and figure
 python3 scripts/ablate_tiny_loop.py \
-  --checkpoint .../tiny-loop-p3/model.pt \
-  --val .../validation.u16 --manifest .../manifest.json \
-  --out .../tiny-loop-p3/ablation.json
+  --checkpoint $RUN_DIR/tiny-loop-p3/model.pt \
+  --val $DATA_DIR/tokenized/validation.u16 \
+  --manifest $DATA_DIR/tokenized/manifest.json \
+  --out $RUN_DIR/tiny-loop-p3/ablation.json
 python3 scripts/plot_tiny_loop.py \
-  --p3 .../tiny-loop-p3/results.json \
-  --p1 .../tiny-loop-p1/results.json \
-  --ablation .../tiny-loop-p3/ablation.json \
-  --out .../tiny-loop-p3/curve
+  --p3 $RUN_DIR/tiny-loop-p3/results.json \
+  --p1 $RUN_DIR/tiny-loop-p1/results.json \
+  --ablation $RUN_DIR/tiny-loop-p3/ablation.json \
+  --out $RUN_DIR/tiny-loop-p3/curve
 ```
 
 Data and checkpoints stay outside the public repo; only the tokenizer, scripts and

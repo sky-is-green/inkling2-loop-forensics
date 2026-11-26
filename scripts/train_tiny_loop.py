@@ -8,10 +8,10 @@ and seed so inference-time looping can be compared with trained looping.
 
 Example:
   python scripts/train_tiny_loop.py \
-    --train ~/Desktop/scion-loop-work/data/wikitext-103/tokenized/train.u16 \
-    --val   ~/Desktop/scion-loop-work/data/wikitext-103/tokenized/validation.u16 \
-    --manifest ~/Desktop/scion-loop-work/data/wikitext-103/tokenized/manifest.json \
-    --out ~/Desktop/scion-loop-work/runs/tiny-loop-p3 \
+    --train "$DATA_DIR/tokenized/train.u16" \
+    --val   "$DATA_DIR/tokenized/validation.u16" \
+    --manifest "$DATA_DIR/tokenized/manifest.json" \
+    --out "$RUN_DIR/tiny-loop-p3" \
     --passes 3 --tokens 120000000
 """
 import argparse

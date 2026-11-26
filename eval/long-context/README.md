@@ -22,7 +22,13 @@ answer. Build them with `scripts/build_needle_prompts.py`.
 boundary only satisfies the harness's length check and is never scored. This separates the
 context-length effect from target difficulty. `fixed-target/manifest.json` records the
 nominal context, actual `n_ctx`, token counts and hashes. Build them with
-`scripts/make_fixed_target_slices.py` (`llama-tokenize` is used to hit exact token counts).
+`scripts/make_fixed_target_slices.py` (`llama-tokenize` is used to hit exact token counts):
+
+```bash
+python3 scripts/make_fixed_target_slices.py \
+  --model /path/to/Inkling-2-Mini.gguf \
+  --tokenize /path/to/llama-tokenize
+```
 
 ## Scored target
 

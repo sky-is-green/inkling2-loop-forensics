@@ -7,8 +7,8 @@ repository; only the tokenizer and this script are kept.
 
 Example:
   python3 scripts/prepare_wikitext.py \
-    --data-dir ~/Desktop/scion-loop-work/data/wikitext-103 \
-    --out-dir  ~/Desktop/scion-loop-work/data/wikitext-103/tokenized
+    --data-dir "$DATA_DIR" \
+    --out-dir  "$DATA_DIR/tokenized"
 """
 import argparse
 import hashlib
